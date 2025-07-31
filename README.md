@@ -1,10 +1,12 @@
 # Unleash::Client
 
-![Build Status](https://github.com/Unleash/unleash-client-ruby/actions/workflows/pull_request.yml/badge.svg?branch=main)
-[![Coverage Status](https://coveralls.io/repos/github/Unleash/unleash-client-ruby/badge.svg?branch=main)](https://coveralls.io/github/Unleash/unleash-client-ruby?branch=main)
+![Build Status](https://github.com/Unleash/unleash-ruby-sdk/actions/workflows/pull_request.yml/badge.svg?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/Unleash/unleash-ruby-sdk/badge.svg?branch=main)](https://coveralls.io/github/Unleash/unleash-ruby-sdk?branch=main)
 [![Gem Version](https://badge.fury.io/rb/unleash.svg)](https://badge.fury.io/rb/unleash)
 
-Ruby client for the [Unleash](https://github.com/Unleash/unleash) feature management service.
+Unleash is a private, secure, and scalable [feature management platform](https://www.getunleash.io/) built to reduce the risk of releasing new features and accelerate software development. This Ruby SDK is designed to help you integrate with Unleash and evaluate feature flags inside your application.
+
+You can use this client with [Unleash Enterprise](https://www.getunleash.io/pricing?utm_source=readme&utm_medium={{language}}) or [Unleash Open Source](https://github.com/Unleash/unleash).
 
 >  **Migrating to v6**
 >
@@ -563,7 +565,7 @@ To release a new version, follow these steps:
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/unleash/unleash-client-ruby.
+Bug reports and pull requests are welcome on GitHub at https://github.com/unleash/unleash-ruby-sdk.
 
 Be sure to run both `bundle exec rspec` and `bundle exec rubocop` in your branch before creating a pull request.
 
