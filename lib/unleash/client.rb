@@ -189,12 +189,7 @@ module Unleash
 
     def initialize_client_mode
       if Unleash.configuration.streaming_mode?
-        if RUBY_ENGINE == 'jruby'
-          Unleash.logger.warn "Streaming mode is disabled on JRuby. Falling back to polling."
-          start_toggle_fetcher
-        else
-          start_streaming_client
-        end
+        start_streaming_client
       else
         start_toggle_fetcher
       end
