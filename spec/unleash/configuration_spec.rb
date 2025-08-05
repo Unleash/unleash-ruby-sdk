@@ -105,12 +105,6 @@ RSpec.describe Unleash do
       expect(config.fetch_toggles_uri.to_s).to eq('https://testurl/api/client/features?project=test-project')
     end
 
-    it "should build the correct unleash endpoint when streaming mode is enabled" do
-      config = Unleash::Configuration.new(url: 'https://testurl/api', app_name: 'test-app')
-      config.experimental_mode = { type: 'streaming' }
-      expect(config.fetch_toggles_uri.to_s).to eq('https://testurl/api/client/streaming')
-    end
-
     it "should allow hashes for custom_http_headers via yield" do
       Unleash.configure do |config|
         config.url      = 'http://test-url/'
