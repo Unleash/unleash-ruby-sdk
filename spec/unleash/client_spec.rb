@@ -763,6 +763,10 @@ RSpec.describe Unleash::Client do
   end
 
   describe "streaming mode" do
+    before(:context) do
+      skip "Streaming mode is not supported on JRuby" if RUBY_ENGINE == 'jruby'
+    end
+
     it "should process unleash-connected event" do
       WebMock.stub_request(:post, "http://test-url/client/register")
         .to_return(status: 200, body: "", headers: {})

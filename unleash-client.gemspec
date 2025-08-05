@@ -23,7 +23,6 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
   spec.required_ruby_version = ">= 2.7"
 
-  spec.add_dependency "http", "< 5.0.0"
   spec.add_dependency "ld-eventsource", "~> 2.2.0"
   spec.add_dependency "yggdrasil-engine", "~> 1.0.4"
 

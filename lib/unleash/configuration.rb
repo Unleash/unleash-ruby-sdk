@@ -97,6 +97,8 @@ module Unleash
     end
 
     def streaming_mode?
+      return false if RUBY_ENGINE == 'jruby'
+
       self.experimental_mode.is_a?(Hash) && self.experimental_mode[:type] == 'streaming'
     end
 
