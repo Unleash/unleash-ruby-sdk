@@ -17,7 +17,7 @@ module Unleash
 
         Unleash.logger.debug "Starting streaming from URL: #{Unleash.configuration.fetch_toggles_uri}"
 
-        create_event_source
+        self.event_source = create_event_source
         return if self.event_source.nil?
 
         setup_event_handlers
@@ -79,13 +79,12 @@ module Unleash
       sse_client = Unleash::Util::EventSourceWrapper.client
       if sse_client.nil?
         Unleash.logger.warn "Streaming mode is not available. Falling back to polling."
-        self.event_source = nil
-        return
+        return nil
       end
 
       headers = (Unleash.configuration.http_headers || {}).dup
 
-      self.event_source = sse_client.new(
+      sse_client.new(
         Unleash.configuration.fetch_toggles_uri.to_s,
         headers: headers,
         read_timeout: 60, # start a new SSE connection when no heartbeat received in 1 minute
