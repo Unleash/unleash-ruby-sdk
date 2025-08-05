@@ -5,7 +5,7 @@ require 'unleash/scheduled_executor'
 require 'unleash/streaming_client'
 require 'unleash/variant'
 require 'unleash/util/http'
-require 'ld-eventsource'
+require 'unleash/util/event_source_wrapper'
 require 'logger'
 require 'time'
 
@@ -189,13 +189,13 @@ module Unleash
 
     def initialize_client_mode
       if Unleash.configuration.streaming_mode?
-        start_streaming_client
-      else
-        if RUBY_ENGINE == 'jruby' &&
-           Unleash.configuration.experimental_mode.is_a?(Hash) &&
-           Unleash.configuration.experimental_mode[:type] == 'streaming'
+        if RUBY_ENGINE == 'jruby'
           Unleash.logger.warn "Streaming mode is disabled on JRuby. Falling back to polling."
+          start_toggle_fetcher
+        else
+          start_streaming_client
         end
+      else
         start_toggle_fetcher
       end
     end

@@ -762,90 +762,88 @@ RSpec.describe Unleash::Client do
     ).to be false
   end
 
-  describe "streaming mode" do
-    before(:context) do
-      skip "Streaming mode is not supported on JRuby" if RUBY_ENGINE == 'jruby'
-    end
+  unless RUBY_ENGINE == 'jruby'
+    describe "streaming mode" do
+      it "should process unleash-connected event" do
+        WebMock.stub_request(:post, "http://test-url/client/register")
+          .to_return(status: 200, body: "", headers: {})
 
-    it "should process unleash-connected event" do
-      WebMock.stub_request(:post, "http://test-url/client/register")
-        .to_return(status: 200, body: "", headers: {})
+        sse_response_body = <<~SSE
+          event: unleash-connected
+          data: {"version":1,"features":[{"name":"test-feature","enabled":true,"strategies":[{"name":"default"}]}]}
 
-      sse_response_body = <<~SSE
-        event: unleash-connected
-        data: {"version":1,"features":[{"name":"test-feature","enabled":true,"strategies":[{"name":"default"}]}]}
+        SSE
 
-      SSE
+        WebMock.stub_request(:get, "http://test-url/client/streaming")
+          .with(headers: { 'X-API-KEY' => '123' })
+          .to_return(
+            status: 200,
+            body: sse_response_body,
+            headers: { 'Content-Type' => 'text/event-stream' }
+          )
 
-      WebMock.stub_request(:get, "http://test-url/client/streaming")
-        .with(headers: { 'X-API-KEY' => '123' })
-        .to_return(
-          status: 200,
-          body: sse_response_body,
-          headers: { 'Content-Type' => 'text/event-stream' }
-        )
+        Unleash.configure do |config|
+          config.url = 'http://test-url/'
+          config.app_name = 'my-test-app'
+          config.instance_id = 'rspec/test'
+          config.disable_metrics = true
+          config.custom_http_headers = { 'X-API-KEY' => '123' }
+          config.experimental_mode = { type: 'streaming' }
+        end
 
-      Unleash.configure do |config|
-        config.url = 'http://test-url/'
-        config.app_name = 'my-test-app'
-        config.instance_id = 'rspec/test'
-        config.disable_metrics = true
-        config.custom_http_headers = { 'X-API-KEY' => '123' }
-        config.experimental_mode = { type: 'streaming' }
+        unleash_client = Unleash::Client.new
+
+        sleep(0.1)
+
+        expect(WebMock).to have_requested(:get, "http://test-url/client/streaming")
+          .with(headers: { 'X-API-KEY' => '123' })
+
+        expect(unleash_client.is_enabled?('test-feature')).to be true
+
+        unleash_client.shutdown!
       end
 
-      unleash_client = Unleash::Client.new
+      it "should process unleash-updated event" do
+        WebMock.stub_request(:post, "http://test-url/client/register")
+          .to_return(status: 200, body: "", headers: {})
 
-      sleep(0.1)
+        sse_response_body = <<~SSE
+          event: unleash-updated
+          data: {"version":1,"features":[{"name":"test-feature","enabled":true,"strategies":[{"name":"default"}]}]}
 
-      expect(WebMock).to have_requested(:get, "http://test-url/client/streaming")
-        .with(headers: { 'X-API-KEY' => '123' })
+        SSE
 
-      expect(unleash_client.is_enabled?('test-feature')).to be true
+        WebMock.stub_request(:get, "http://test-url/client/streaming")
+          .with(headers: { 'X-API-KEY' => '123' })
+          .to_return(
+            status: 200,
+            body: sse_response_body,
+            headers: { 'Content-Type' => 'text/event-stream' }
+          )
 
-      unleash_client.shutdown!
-    end
+        Unleash.configure do |config|
+          config.url = 'http://test-url/'
+          config.app_name = 'my-test-app'
+          config.instance_id = 'rspec/test'
+          config.disable_metrics = true
+          config.custom_http_headers = { 'X-API-KEY' => '123' }
+          config.experimental_mode = { type: 'streaming' }
+        end
 
-    it "should process unleash-updated event" do
-      WebMock.stub_request(:post, "http://test-url/client/register")
-        .to_return(status: 200, body: "", headers: {})
+        unleash_client = Unleash::Client.new
 
-      sse_response_body = <<~SSE
-        event: unleash-updated
-        data: {"version":1,"features":[{"name":"test-feature","enabled":true,"strategies":[{"name":"default"}]}]}
+        expect(unleash_client.streaming_client).to be_a(Unleash::StreamingClient)
+        expect(unleash_client.streaming_client.running?).to be true
 
-      SSE
+        sleep(0.1)
 
-      WebMock.stub_request(:get, "http://test-url/client/streaming")
-        .with(headers: { 'X-API-KEY' => '123' })
-        .to_return(
-          status: 200,
-          body: sse_response_body,
-          headers: { 'Content-Type' => 'text/event-stream' }
-        )
+        expect(WebMock).to have_requested(:get, "http://test-url/client/streaming")
+          .with(headers: { 'X-API-KEY' => '123' })
 
-      Unleash.configure do |config|
-        config.url = 'http://test-url/'
-        config.app_name = 'my-test-app'
-        config.instance_id = 'rspec/test'
-        config.disable_metrics = true
-        config.custom_http_headers = { 'X-API-KEY' => '123' }
-        config.experimental_mode = { type: 'streaming' }
+        expect(unleash_client.is_enabled?('test-feature')).to be true
+
+        unleash_client.shutdown!
       end
-
-      unleash_client = Unleash::Client.new
-
-      expect(unleash_client.streaming_client).to be_a(Unleash::StreamingClient)
-      expect(unleash_client.streaming_client.running?).to be true
-
-      sleep(0.1)
-
-      expect(WebMock).to have_requested(:get, "http://test-url/client/streaming")
-        .with(headers: { 'X-API-KEY' => '123' })
-
-      expect(unleash_client.is_enabled?('test-feature')).to be true
-
-      unleash_client.shutdown!
     end
   end
 end

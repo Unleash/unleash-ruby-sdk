@@ -1,4 +1,3 @@
-require 'ld-eventsource'
 require 'json'
 
 module Unleash
@@ -18,24 +17,10 @@ module Unleash
 
         Unleash.logger.debug "Starting streaming from URL: #{Unleash.configuration.fetch_toggles_uri}"
 
-        headers = (Unleash.configuration.http_headers || {}).dup
+        create_event_source
+        return if self.event_source.nil?
 
-        self.event_source = SSE::Client.new(
-          Unleash.configuration.fetch_toggles_uri.to_s,
-          headers: headers,
-          read_timeout: 60, # start a new SSE connection when no heartbeat received in 1 minute
-          reconnect_time: 2,
-          connect_timeout: 10,
-          logger: Unleash.logger
-        )
-
-        self.event_source.on_event do |event|
-          handle_event(event)
-        end
-
-        self.event_source.on_error do |error|
-          Unleash.logger.warn "Streaming error: #{error}"
-        end
+        setup_event_handlers
 
         self.running = true
       end
@@ -88,6 +73,36 @@ module Unleash
       Unleash.logger.error "Failed to parse streaming event data: #{e.message}"
     rescue StandardError => e
       Unleash.logger.error "Error processing delta update: #{e.message}"
+    end
+
+    def create_event_source
+      sse_client = Unleash::Util::EventSourceWrapper.client
+      if sse_client.nil?
+        Unleash.logger.warn "Streaming mode is not available. Falling back to polling."
+        self.event_source = nil
+        return
+      end
+
+      headers = (Unleash.configuration.http_headers || {}).dup
+
+      self.event_source = sse_client.new(
+        Unleash.configuration.fetch_toggles_uri.to_s,
+        headers: headers,
+        read_timeout: 60, # start a new SSE connection when no heartbeat received in 1 minute
+        reconnect_time: 2,
+        connect_timeout: 10,
+        logger: Unleash.logger
+      )
+    end
+
+    def setup_event_handlers
+      self.event_source.on_event do |event|
+        handle_event(event)
+      end
+
+      self.event_source.on_error do |error|
+        Unleash.logger.warn "Streaming error: #{error}"
+      end
     end
   end
 end
