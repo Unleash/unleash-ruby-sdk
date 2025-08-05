@@ -34,16 +34,7 @@ module Unleash
 
       register
 
-      if Unleash.configuration.streaming_mode?
-        start_streaming_client
-      else
-        if RUBY_ENGINE == 'jruby' &&
-           Unleash.configuration.experimental_mode.is_a?(Hash) && 
-           Unleash.configuration.experimental_mode[:type] == 'streaming'
-          Unleash.logger.warn "Streaming mode is disabled on JRuby. Falling back to polling."
-        end
-        start_toggle_fetcher
-      end
+      initialize_client_mode
 
       start_metrics unless Unleash.configuration.disable_metrics
     end
@@ -194,6 +185,19 @@ module Unleash
 
     def first_fetch_is_eager
       Unleash.configuration.use_bootstrap?
+    end
+
+    def initialize_client_mode
+      if Unleash.configuration.streaming_mode?
+        start_streaming_client
+      else
+        if RUBY_ENGINE == 'jruby' &&
+           Unleash.configuration.experimental_mode.is_a?(Hash) &&
+           Unleash.configuration.experimental_mode[:type] == 'streaming'
+          Unleash.logger.warn "Streaming mode is disabled on JRuby. Falling back to polling."
+        end
+        start_toggle_fetcher
+      end
     end
   end
 end
