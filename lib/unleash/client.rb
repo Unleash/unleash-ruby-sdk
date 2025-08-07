@@ -117,7 +117,7 @@ module Unleash
         'appName': Unleash.configuration.app_name,
         'instanceId': Unleash.configuration.instance_id,
         'connectionId': Unleash.configuration.connection_id,
-        'sdkVersion': "unleash-client-ruby:" + Unleash::VERSION,
+        'sdkVersion': "unleash-ruby-sdk:" + Unleash::VERSION,
         'strategies': Unleash.strategies.known_strategies,
         'started': Time.now.iso8601(Unleash::TIME_RESOLUTION),
         'interval': Unleash.configuration.metrics_interval_in_millis,

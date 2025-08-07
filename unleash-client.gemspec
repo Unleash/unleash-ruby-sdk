@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.description   = "This is the ruby client for Unleash, a powerful feature toggle system
     that gives you a great overview over all feature toggles across all your applications and services."
 
-  spec.homepage      = "https://github.com/unleash/unleash-client-ruby"
+  spec.homepage      = "https://github.com/unleash/unleash-ruby-sdk"
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
