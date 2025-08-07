@@ -770,7 +770,7 @@ RSpec.describe Unleash::Client do
 
         sse_response_body = <<~SSE
           event: unleash-connected
-          data: {"version":1,"features":[{"name":"test-feature","enabled":true,"strategies":[{"name":"default"}]}]}
+          data: {"events":[{"type":"hydration","eventId":1,"features":[{"name":"test-feature","enabled":true,"strategies":[{"name":"default"}]}],"segments":[]}]}
 
         SSE
 
@@ -809,7 +809,7 @@ RSpec.describe Unleash::Client do
 
         sse_response_body = <<~SSE
           event: unleash-updated
-          data: {"version":1,"features":[{"name":"test-feature","enabled":true,"strategies":[{"name":"default"}]}]}
+          data: {"events":[{"type":"feature-updated","eventId":2,"feature":{"name":"test-feature","enabled":true,"strategies":[{"name":"default"}]}}]}
 
         SSE
 
