@@ -77,7 +77,7 @@ log_level = \
 
 @unleash = Unleash::Client.new(
   url: options[:url],
-  app_name: 'unleash-client-ruby-cli',
+  app_name: 'unleash-ruby-sdk-cli',
   disable_metrics: options[:metrics],
   custom_http_headers: options[:custom_http_headers],
   log_level: log_level

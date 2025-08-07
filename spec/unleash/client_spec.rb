@@ -17,7 +17,7 @@ RSpec.describe Unleash::Client do
           'Content-Type' => 'application/json',
           'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
           'User-Agent' => "UnleashClientRuby/#{Unleash::VERSION} #{RUBY_ENGINE}/#{RUBY_VERSION} [#{RUBY_PLATFORM}]",
-          'Unleash-Sdk' => "unleash-client-ruby:#{Unleash::VERSION}",
+          'Unleash-Sdk' => "unleash-ruby-sdk:#{Unleash::VERSION}",
           'X-Api-Key' => '123'
         }
       )
@@ -29,7 +29,7 @@ RSpec.describe Unleash::Client do
           'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
           'Content-Type' => 'application/json',
           'User-Agent' => "UnleashClientRuby/#{Unleash::VERSION} #{RUBY_ENGINE}/#{RUBY_VERSION} [#{RUBY_PLATFORM}]",
-          'Unleash-Sdk' => "unleash-client-ruby:#{Unleash::VERSION}",
+          'Unleash-Sdk' => "unleash-ruby-sdk:#{Unleash::VERSION}",
           'Unleash-Interval' => '60'
         }
       )
@@ -56,7 +56,7 @@ RSpec.describe Unleash::Client do
           'Unleash-Instanceid' => 'rspec/test',
           'Unleash-Connection-Id' => fixed_uuid,
           'User-Agent' => "UnleashClientRuby/#{Unleash::VERSION} #{RUBY_ENGINE}/#{RUBY_VERSION} [#{RUBY_PLATFORM}]",
-          'Unleash-Sdk' => "unleash-client-ruby:#{Unleash::VERSION}",
+          'Unleash-Sdk' => "unleash-ruby-sdk:#{Unleash::VERSION}",
           'X-Api-Key' => '123',
           'Unleash-Interval' => '15'
         }
@@ -136,7 +136,7 @@ RSpec.describe Unleash::Client do
           'Unleash-Appname' => 'my-test-app',
           'Unleash-Instanceid' => 'rspec/test',
           'User-Agent' => "UnleashClientRuby/#{Unleash::VERSION} #{RUBY_ENGINE}/#{RUBY_VERSION} [#{RUBY_PLATFORM}]",
-          'Unleash-Sdk' => "unleash-client-ruby:#{Unleash::VERSION}",
+          'Unleash-Sdk' => "unleash-ruby-sdk:#{Unleash::VERSION}",
           'X-Api-Key' => '123'
         }
       )
@@ -178,7 +178,7 @@ RSpec.describe Unleash::Client do
           'Unleash-Appname' => 'my-test-app',
           'Unleash-Instanceid' => 'rspec/test',
           'User-Agent' => "UnleashClientRuby/#{Unleash::VERSION} #{RUBY_ENGINE}/#{RUBY_VERSION} [#{RUBY_PLATFORM}]",
-          'Unleash-Sdk' => "unleash-client-ruby:#{Unleash::VERSION}",
+          'Unleash-Sdk' => "unleash-ruby-sdk:#{Unleash::VERSION}",
           'X-Api-Key' => '123',
           'Unleash-Interval' => '15'
         }
@@ -278,7 +278,7 @@ RSpec.describe Unleash::Client do
           'Content-Type' => 'application/json',
           'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
           'User-Agent' => "UnleashClientRuby/#{Unleash::VERSION} #{RUBY_ENGINE}/#{RUBY_VERSION} [#{RUBY_PLATFORM}]",
-          'Unleash-Sdk' => "unleash-client-ruby:#{Unleash::VERSION}",
+          'Unleash-Sdk' => "unleash-ruby-sdk:#{Unleash::VERSION}",
           'X-Api-Key' => '123'
         }
       )
@@ -293,7 +293,7 @@ RSpec.describe Unleash::Client do
           'Unleash-Appname' => 'my-test-app',
           'Unleash-Instanceid' => 'rspec/test',
           'User-Agent' => "UnleashClientRuby/#{Unleash::VERSION} #{RUBY_ENGINE}/#{RUBY_VERSION} [#{RUBY_PLATFORM}]",
-          'Unleash-Sdk' => "unleash-client-ruby:#{Unleash::VERSION}",
+          'Unleash-Sdk' => "unleash-ruby-sdk:#{Unleash::VERSION}",
           'X-Api-Key' => '123',
           'Unleash-Interval' => '15'
         }
@@ -329,7 +329,7 @@ RSpec.describe Unleash::Client do
           'Content-Type' => 'application/json',
           'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
           'User-Agent' => "UnleashClientRuby/#{Unleash::VERSION} #{RUBY_ENGINE}/#{RUBY_VERSION} [#{RUBY_PLATFORM}]",
-          'Unleash-Sdk' => "unleash-client-ruby:#{Unleash::VERSION}",
+          'Unleash-Sdk' => "unleash-ruby-sdk:#{Unleash::VERSION}",
           'X-Api-Key' => '123'
         }
       )
@@ -354,7 +354,7 @@ RSpec.describe Unleash::Client do
           'Unleash-Appname' => 'my-test-app',
           'Unleash-Instanceid' => 'rspec/test',
           'User-Agent' => "UnleashClientRuby/#{Unleash::VERSION} #{RUBY_ENGINE}/#{RUBY_VERSION} [#{RUBY_PLATFORM}]",
-          'Unleash-Sdk' => "unleash-client-ruby:#{Unleash::VERSION}",
+          'Unleash-Sdk' => "unleash-ruby-sdk:#{Unleash::VERSION}",
           'X-Api-Key' => '123',
           'Unleash-Interval' => '15'
         }
@@ -634,7 +634,7 @@ RSpec.describe Unleash::Client do
             'Unleash-Appname' => 'my-test-app',
             'Unleash-Instanceid' => 'rspec/test',
             'User-Agent' => "UnleashClientRuby/#{Unleash::VERSION} #{RUBY_ENGINE}/#{RUBY_VERSION} [#{RUBY_PLATFORM}]",
-            'Unleash-Sdk' => "unleash-client-ruby:#{Unleash::VERSION}",
+            'Unleash-Sdk' => "unleash-ruby-sdk:#{Unleash::VERSION}",
             'X-Api-Key' => '123'
           }
         )
@@ -649,7 +649,7 @@ RSpec.describe Unleash::Client do
             'Unleash-Appname' => 'my-test-app',
             'Unleash-Instanceid' => 'rspec/test',
             'User-Agent' => "UnleashClientRuby/#{Unleash::VERSION} #{RUBY_ENGINE}/#{RUBY_VERSION} [#{RUBY_PLATFORM}]",
-            'Unleash-Sdk' => "unleash-client-ruby:#{Unleash::VERSION}",
+            'Unleash-Sdk' => "unleash-ruby-sdk:#{Unleash::VERSION}",
             'X-Api-Key' => '123',
             'Unleash-Interval' => '15'
           }

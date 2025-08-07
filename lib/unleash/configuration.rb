@@ -57,7 +57,7 @@ module Unleash
         'UNLEASH-INSTANCEID' => self.instance_id,
         'UNLEASH-APPNAME' => self.app_name,
         'Unleash-Client-Spec' => CLIENT_SPECIFICATION_VERSION,
-        'UNLEASH-SDK' => "unleash-client-ruby:#{Unleash::VERSION}"
+        'UNLEASH-SDK' => "unleash-ruby-sdk:#{Unleash::VERSION}"
       }.merge!(generate_custom_http_headers)
       headers['UNLEASH-CONNECTION-ID'] = @connection_id
       headers
