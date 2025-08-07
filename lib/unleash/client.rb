@@ -2,14 +2,16 @@ require 'unleash/configuration'
 require 'unleash/toggle_fetcher'
 require 'unleash/metrics_reporter'
 require 'unleash/scheduled_executor'
+require 'unleash/streaming_client'
 require 'unleash/variant'
 require 'unleash/util/http'
+require 'unleash/util/event_source_wrapper'
 require 'logger'
 require 'time'
 
 module Unleash
   class Client
-    attr_accessor :fetcher_scheduled_executor, :metrics_scheduled_executor
+    attr_accessor :fetcher_scheduled_executor, :metrics_scheduled_executor, :streaming_client
 
     # rubocop:disable Metrics/AbcSize
     def initialize(*opts)
@@ -21,7 +23,8 @@ module Unleash
       Unleash.engine = YggdrasilEngine.new
       Unleash.engine.register_custom_strategies(Unleash.configuration.strategies.custom_strategies)
 
-      Unleash.toggle_fetcher = Unleash::ToggleFetcher.new Unleash.engine
+      Unleash.toggle_fetcher = Unleash::ToggleFetcher.new Unleash.engine unless Unleash.configuration.streaming_mode?
+
       if Unleash.configuration.disable_client
         Unleash.logger.warn "Unleash::Client is disabled! Will only return default (or bootstrapped if available) results!"
         Unleash.logger.warn "Unleash::Client is disabled! Metrics and MetricsReporter are also disabled!"
@@ -30,7 +33,9 @@ module Unleash
       end
 
       register
-      start_toggle_fetcher
+
+      initialize_client_mode
+
       start_metrics unless Unleash.configuration.disable_metrics
     end
     # rubocop:enable Metrics/AbcSize
@@ -105,7 +110,11 @@ module Unleash
     # quick shutdown: just kill running threads
     def shutdown!
       unless Unleash.configuration.disable_client
-        self.fetcher_scheduled_executor.exit
+        if Unleash.configuration.streaming_mode?
+          self.streaming_client.stop
+        else
+          self.fetcher_scheduled_executor.exit
+        end
         self.metrics_scheduled_executor.exit unless Unleash.configuration.disable_metrics
       end
     end
@@ -140,6 +149,11 @@ module Unleash
       end
     end
 
+    def start_streaming_client
+      self.streaming_client = Unleash::StreamingClient.new Unleash.engine
+      self.streaming_client.start
+    end
+
     def start_metrics
       Unleash.reporter = Unleash::MetricsReporter.new
       self.metrics_scheduled_executor = Unleash::ScheduledExecutor.new(
@@ -171,6 +185,14 @@ module Unleash
 
     def first_fetch_is_eager
       Unleash.configuration.use_bootstrap?
+    end
+
+    def initialize_client_mode
+      if Unleash.configuration.streaming_mode?
+        start_streaming_client
+      else
+        start_toggle_fetcher
+      end
     end
   end
 end
