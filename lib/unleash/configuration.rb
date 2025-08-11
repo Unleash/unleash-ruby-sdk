@@ -98,11 +98,11 @@ module Unleash
 
     def streaming_mode?
       is_streaming_configured = self.experimental_mode.is_a?(Hash) && self.experimental_mode[:type] == 'streaming'
-      
+
       if is_streaming_configured && RUBY_ENGINE == 'jruby'
         raise "Streaming mode is not supported on JRuby. Please use polling mode instead."
       end
-      
+
       is_streaming_configured
     end
 

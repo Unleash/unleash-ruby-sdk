@@ -12,7 +12,7 @@ module Unleash
       self.running = false
     end
 
-    def run(&block)
+    def run(&_block)
       start
     end
 
@@ -47,7 +47,8 @@ module Unleash
     def create_event_source
       sse_client = Unleash::Util::EventSourceWrapper.client
       if sse_client.nil?
-        raise "Streaming mode is configured but EventSource client is not available. Please install the 'ld-eventsource' gem or switch to polling mode."
+        raise "Streaming mode is configured but EventSource client is not available. " \
+              "Please install the 'ld-eventsource' gem or switch to polling mode."
       end
 
       headers = (Unleash.configuration.http_headers || {}).dup
