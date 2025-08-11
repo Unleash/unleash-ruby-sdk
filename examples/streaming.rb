@@ -3,36 +3,29 @@
 require 'unleash'
 require 'unleash/context'
 
-puts ">> START simple.rb"
-
-# Unleash.configure do |config|
-#   config.url = 'https://unleash.herokuapp.com/api'
-#   config.custom_http_headers = { 'Authorization': '943ca9171e2c884c545c5d82417a655fb77cec970cc3b78a8ff87f4406b495d0' }
-#   config.app_name = 'simple-test'
-#   config.refresh_interval = 2
-#   config.metrics_interval = 2
-#   config.retry_limit = 2
-# end
-# @unleash = Unleash::Client.new
-
-# or:
+puts ">> START streaming.rb"
 
 @unleash = Unleash::Client.new(
   url: 'https://app.unleash-hosted.com/demo/api',
   custom_http_headers: { 'Authorization': 'demo-app:dev.9fc74dd72d2b88bea5253c04240b21a54841f08d9918046ed55a06b5' },
-  app_name: 'simple-test',
-  instance_id: 'local-test-cli',
+  app_name: 'streaming-test',
+  instance_id: 'local-streaming-cli',
   refresh_interval: 2,
   metrics_interval: 2,
-  retry_limit: 2
+  retry_limit: 2,
+  experimental_mode: { type: 'streaming' },
+  timeout: 5,
+  log_level: Logger::DEBUG
 )
 
 feature_name = "example-flag"
 unleash_context = Unleash::Context.new
 unleash_context.user_id = 123
 
-sleep 1
-3.times do
+puts "Waiting for client to initialize..."
+sleep 2
+
+100.times do
   if @unleash.is_enabled?(feature_name, unleash_context)
     puts "> #{feature_name} is enabled"
   else
@@ -43,8 +36,6 @@ sleep 1
   puts ""
   puts ""
 end
-
-sleep 3
 feature_name = "foobar"
 if @unleash.is_enabled?(feature_name, unleash_context, true)
   puts "> #{feature_name} is enabled"
@@ -56,4 +47,4 @@ puts "> shutting down client..."
 
 @unleash.shutdown
 
-puts ">> END simple.rb"
+puts ">> END streaming.rb"

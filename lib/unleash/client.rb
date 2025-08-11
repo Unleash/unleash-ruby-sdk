@@ -2,8 +2,10 @@ require 'unleash/configuration'
 require 'unleash/toggle_fetcher'
 require 'unleash/metrics_reporter'
 require 'unleash/scheduled_executor'
+require 'unleash/streaming_client_executor'
 require 'unleash/variant'
 require 'unleash/util/http'
+require 'unleash/util/event_source_wrapper'
 require 'logger'
 require 'time'
 
@@ -21,7 +23,8 @@ module Unleash
       Unleash.engine = YggdrasilEngine.new
       Unleash.engine.register_custom_strategies(Unleash.configuration.strategies.custom_strategies)
 
-      Unleash.toggle_fetcher = Unleash::ToggleFetcher.new Unleash.engine
+      Unleash.toggle_fetcher = Unleash::ToggleFetcher.new Unleash.engine unless Unleash.configuration.streaming_mode?
+
       if Unleash.configuration.disable_client
         Unleash.logger.warn "Unleash::Client is disabled! Will only return default (or bootstrapped if available) results!"
         Unleash.logger.warn "Unleash::Client is disabled! Metrics and MetricsReporter are also disabled!"
@@ -30,7 +33,9 @@ module Unleash
       end
 
       register
-      start_toggle_fetcher
+
+      initialize_client_mode
+
       start_metrics unless Unleash.configuration.disable_metrics
     end
     # rubocop:enable Metrics/AbcSize
@@ -105,7 +110,7 @@ module Unleash
     # quick shutdown: just kill running threads
     def shutdown!
       unless Unleash.configuration.disable_client
-        self.fetcher_scheduled_executor.exit
+        self.fetcher_scheduled_executor&.exit
         self.metrics_scheduled_executor.exit unless Unleash.configuration.disable_metrics
       end
     end
@@ -140,6 +145,11 @@ module Unleash
       end
     end
 
+    def start_streaming_client
+      self.fetcher_scheduled_executor = Unleash::StreamingClientExecutor.new('StreamingExecutor', Unleash.engine)
+      self.fetcher_scheduled_executor.run
+    end
+
     def start_metrics
       Unleash.reporter = Unleash::MetricsReporter.new
       self.metrics_scheduled_executor = Unleash::ScheduledExecutor.new(
@@ -171,6 +181,14 @@ module Unleash
 
     def first_fetch_is_eager
       Unleash.configuration.use_bootstrap?
+    end
+
+    def initialize_client_mode
+      if Unleash.configuration.streaming_mode?
+        start_streaming_client
+      else
+        start_toggle_fetcher
+      end
     end
   end
 end

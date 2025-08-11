@@ -22,7 +22,8 @@ module Unleash
       :log_level,
       :bootstrap_config,
       :strategies,
-      :use_delta_api
+      :use_delta_api,
+      :experimental_mode
     attr_reader :connection_id
 
     def initialize(opts = {})
@@ -67,7 +68,9 @@ module Unleash
       uri = nil
       ## Personal feeling but Rubocop's suggestion here is too dense to be properly readable
       # rubocop:disable Style/ConditionalAssignment
-      if self.use_delta_api
+      if streaming_mode?
+        uri = URI("#{self.url_stripped_of_slash}/client/streaming")
+      elsif self.use_delta_api || polling_with_delta?
         uri = URI("#{self.url_stripped_of_slash}/client/delta")
       else
         uri = URI("#{self.url_stripped_of_slash}/client/features")
@@ -93,6 +96,17 @@ module Unleash
       self.bootstrap_config&.valid?
     end
 
+    def streaming_mode?
+      validate_streaming_support! if streaming_configured?
+      streaming_configured?
+    end
+
+    def polling_with_delta?
+      self.experimental_mode.is_a?(Hash) &&
+        self.experimental_mode[:type] == 'polling' &&
+        self.experimental_mode[:format] == 'delta'
+    end
+
     private
 
     def set_defaults
@@ -112,6 +126,7 @@ module Unleash
       self.bootstrap_config = nil
       self.strategies       = Unleash::Strategies.new
       self.use_delta_api    = false
+      self.experimental_mode = nil
 
       self.custom_http_headers = {}
       @connection_id = SecureRandom.uuid
@@ -148,6 +163,16 @@ module Unleash
       __send__("#{opt}=", val)
     rescue NoMethodError
       raise ArgumentError, "unknown configuration parameter '#{val}'"
+    end
+
+    def streaming_configured?
+      self.experimental_mode.is_a?(Hash) && self.experimental_mode[:type] == 'streaming'
+    end
+
+    def validate_streaming_support!
+      return unless RUBY_ENGINE == 'jruby'
+
+      raise "Streaming mode is not supported on JRuby. Please use polling mode instead or switch to MRI/CRuby."
     end
   end
 end
