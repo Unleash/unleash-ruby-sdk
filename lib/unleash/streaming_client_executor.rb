@@ -24,8 +24,6 @@ module Unleash
         Unleash.logger.debug "Starting streaming executor from URL: #{Unleash.configuration.fetch_toggles_uri}"
 
         self.event_source = create_event_source
-        return if self.event_source.nil?
-
         setup_event_handlers
 
         self.running = true
@@ -54,8 +52,7 @@ module Unleash
     def create_event_source
       sse_client = Unleash::Util::EventSourceWrapper.client
       if sse_client.nil?
-        Unleash.logger.warn "Streaming mode is not available. Falling back to polling."
-        return nil
+        raise "Streaming mode is configured but EventSource client is not available. Please install the 'ld-eventsource' gem or switch to polling mode."
       end
 
       headers = (Unleash.configuration.http_headers || {}).dup
