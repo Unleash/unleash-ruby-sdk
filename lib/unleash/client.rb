@@ -2,7 +2,7 @@ require 'unleash/configuration'
 require 'unleash/toggle_fetcher'
 require 'unleash/metrics_reporter'
 require 'unleash/scheduled_executor'
-require 'unleash/streaming_client'
+require 'unleash/streaming_client_executor'
 require 'unleash/variant'
 require 'unleash/util/http'
 require 'unleash/util/event_source_wrapper'
@@ -11,7 +11,7 @@ require 'time'
 
 module Unleash
   class Client
-    attr_accessor :fetcher_scheduled_executor, :metrics_scheduled_executor, :streaming_client
+    attr_accessor :fetcher_scheduled_executor, :metrics_scheduled_executor
 
     # rubocop:disable Metrics/AbcSize
     def initialize(*opts)
@@ -110,11 +110,7 @@ module Unleash
     # quick shutdown: just kill running threads
     def shutdown!
       unless Unleash.configuration.disable_client
-        if Unleash.configuration.streaming_mode?
-          self.streaming_client.stop
-        else
-          self.fetcher_scheduled_executor.exit
-        end
+        self.fetcher_scheduled_executor&.exit
         self.metrics_scheduled_executor.exit unless Unleash.configuration.disable_metrics
       end
     end
@@ -150,8 +146,8 @@ module Unleash
     end
 
     def start_streaming_client
-      self.streaming_client = Unleash::StreamingClient.new Unleash.engine
-      self.streaming_client.start
+      self.fetcher_scheduled_executor = Unleash::StreamingClientExecutor.new('StreamingExecutor', Unleash.engine)
+      self.fetcher_scheduled_executor.run
     end
 
     def start_metrics

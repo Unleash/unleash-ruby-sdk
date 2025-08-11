@@ -832,8 +832,8 @@ RSpec.describe Unleash::Client do
 
         unleash_client = Unleash::Client.new
 
-        expect(unleash_client.streaming_client).to be_a(Unleash::StreamingClient)
-        expect(unleash_client.streaming_client.running?).to be true
+        expect(unleash_client.fetcher_scheduled_executor).to be_a(Unleash::StreamingClientExecutor)
+        expect(unleash_client.fetcher_scheduled_executor.running?).to be true
 
         sleep(0.1)
 
