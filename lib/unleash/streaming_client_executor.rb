@@ -19,21 +19,23 @@ module Unleash
     def start
       return if self.running || Unleash.configuration.disable_client
 
-      Unleash.logger.debug "Starting streaming executor from URL: #{Unleash.configuration.fetch_toggles_uri}"
+      Unleash.logger.debug "Streaming client #{self.name} starting connection to: #{Unleash.configuration.fetch_toggles_uri}"
 
       self.event_source = create_event_source
       setup_event_handlers
 
       self.running = true
+      Unleash.logger.debug "Streaming client #{self.name} connection established"
     end
 
     def stop
       return unless self.running
 
-      Unleash.logger.info "Stopping streaming executor"
+      Unleash.logger.debug "Streaming client #{self.name} stopping connection"
       self.running = false
       self.event_source&.close
       self.event_source = nil
+      Unleash.logger.debug "Streaming client #{self.name} connection closed"
     end
 
     alias exit stop
@@ -69,14 +71,15 @@ module Unleash
       end
 
       self.event_source.on_error do |error|
-        Unleash.logger.warn "Streaming error: #{error}"
+        Unleash.logger.warn "Streaming client #{self.name} error: #{error}"
       end
     end
 
     def handle_event(event)
       self.event_processor.process_event(event)
     rescue StandardError => e
-      Unleash.logger.error "Error in streaming executor event handling: #{e.message}"
+      Unleash.logger.error "Streaming client #{self.name} threw exception #{e.class}: '#{e}'"
+      Unleash.logger.debug "stacktrace: #{e.backtrace}"
     end
   end
 end

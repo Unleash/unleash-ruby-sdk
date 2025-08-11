@@ -21,7 +21,8 @@ module Unleash
         Unleash.logger.debug "Received unknown event type: #{event.type}"
       end
     rescue StandardError => e
-      Unleash.logger.error "Error handling streaming event: #{e.message}"
+      Unleash.logger.error "Error handling streaming event threw exception #{e.class}: '#{e}'"
+      Unleash.logger.debug "stacktrace: #{e.backtrace}"
     end
 
     def handle_delta_event(event_data)
@@ -42,9 +43,11 @@ module Unleash
 
       # TODO: update backup file
     rescue JSON::ParserError => e
-      Unleash.logger.error "Failed to parse streaming event data: #{e.message}"
+      Unleash.logger.error "Unable to parse JSON from streaming event data. Exception thrown #{e.class}: '#{e}'"
+      Unleash.logger.debug "stacktrace: #{e.backtrace}"
     rescue StandardError => e
-      Unleash.logger.error "Error processing delta update: #{e.message}"
+      Unleash.logger.error "Error processing delta update threw exception #{e.class}: '#{e}'"
+      Unleash.logger.debug "stacktrace: #{e.backtrace}"
     end
   end
 end
