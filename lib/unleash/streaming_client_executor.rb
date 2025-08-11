@@ -3,14 +3,13 @@ require 'unleash/util/event_source_wrapper'
 
 module Unleash
   class StreamingClientExecutor
-    attr_accessor :name, :event_source, :event_processor, :running, :mutex
+    attr_accessor :name, :event_source, :event_processor, :running
 
     def initialize(name, engine)
       self.name = name || 'StreamingClientExecutor'
       self.event_source = nil
       self.event_processor = Unleash::StreamingEventProcessor.new(engine)
       self.running = false
-      self.mutex = Mutex.new
     end
 
     def run(&block)
@@ -18,33 +17,29 @@ module Unleash
     end
 
     def start
-      self.mutex.synchronize do
-        return if self.running || Unleash.configuration.disable_client
+      return if self.running || Unleash.configuration.disable_client
 
-        Unleash.logger.debug "Starting streaming executor from URL: #{Unleash.configuration.fetch_toggles_uri}"
+      Unleash.logger.debug "Starting streaming executor from URL: #{Unleash.configuration.fetch_toggles_uri}"
 
-        self.event_source = create_event_source
-        setup_event_handlers
+      self.event_source = create_event_source
+      setup_event_handlers
 
-        self.running = true
-      end
+      self.running = true
     end
 
     def stop
-      self.mutex.synchronize do
-        return unless self.running
+      return unless self.running
 
-        Unleash.logger.info "Stopping streaming executor"
-        self.running = false
-        self.event_source&.close
-        self.event_source = nil
-      end
+      Unleash.logger.info "Stopping streaming executor"
+      self.running = false
+      self.event_source&.close
+      self.event_source = nil
     end
 
     alias exit stop
 
     def running?
-      self.mutex.synchronize { self.running }
+      self.running
     end
 
     private
