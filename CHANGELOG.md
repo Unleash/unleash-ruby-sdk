@@ -13,6 +13,14 @@ Note: These changes are not considered notable:
 
 ## [Unreleased]
 
+## [6.4.0] - 2025-08-12
+### Added
+- Experimental streaming support
+
+#### Changed
+- SDK registration name
+- base64 dependency version
+
 ## [6.3.1] - 2025-05-27
 ### Fixed
 - Upgraded Yggdrasil engine to fix a memory leak in metrics.
