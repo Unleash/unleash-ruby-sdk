@@ -1,0 +1,428 @@
+{
+  "name": "16-strategy-variants",
+  "state": {
+    "version": 1,
+    "features": [
+      {
+        "name": "Feature.strategy.variant.with.constraint",
+        "description": "Strategy variants based on constraint",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "flexibleRollout",
+            "variants": [
+              {
+                "name": "variantName",
+                "weight": 1,
+                "payload": {
+                  "type": "string",
+                  "value": "variantValue"
+                }
+              }
+            ],
+            "parameters": {
+              "rollout": "100",
+              "stickiness": "default",
+              "groupId": "a"
+            },
+            "constraints": [
+              {
+                "contextName": "environment",
+                "operator": "IN",
+                "values": ["dev"]
+              }
+            ]
+          }
+        ],
+        "variants": []
+      },
+      {
+        "name": "Feature.strategy.variant.overrides.feature.variant",
+        "description": "Strategy variants with feature variants",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "flexibleRollout",
+            "parameters": {
+              "rollout": "100",
+              "stickiness": "default",
+              "groupId": "a"
+            },
+            "variants": [
+              {
+                "name": "variantName",
+                "weight": 1,
+                "payload": {
+                  "type": "string",
+                  "value": "variantValue"
+                }
+              }
+            ],
+            "constraints": [
+              {
+                "contextName": "environment",
+                "operator": "IN",
+                "values": ["dev"]
+              }
+            ]
+          }
+        ],
+        "variants": [
+          {
+            "name": "featureVariant",
+            "weight": 1,
+            "payload": {
+              "type": "string",
+              "value": "willBeIgnored"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Feature.strategy.multiple.variants",
+        "description": "Strategy variants with multiple options",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "flexibleRollout",
+            "parameters": {
+              "rollout": "100",
+              "stickiness": "default",
+              "groupId": "a"
+            },
+            "variants": [
+              {
+                "name": "variantNameA",
+                "weight": 1,
+                "payload": {
+                  "type": "string",
+                  "value": "variantValueA"
+                }
+              },
+              {
+                "name": "variantNameB",
+                "weight": 1,
+                "payload": {
+                  "type": "string",
+                  "value": "variantValueB"
+                }
+              }
+            ],
+            "constraints": []
+          }
+        ],
+        "variants": []
+      },
+      {
+        "name": "Feature.strategy.empty.variants",
+        "description": "Strategy variants with empty variant options",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "flexibleRollout",
+            "variants": [],
+            "parameters": {
+              "rollout": "100",
+              "stickiness": "default",
+              "groupId": "a"
+            },
+            "constraints": []
+          }
+        ],
+        "variants": []
+      },
+      {
+        "name": "Feature.strategy.variant.fallback",
+        "description": "Strategy variants fall back to feature variants",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "flexibleRollout",
+            "parameters": {
+              "rollout": "100",
+              "stickiness": "default",
+              "groupId": "a"
+            }
+          }
+        ],
+        "variants": [
+          {
+            "name": "featureVariant",
+            "weight": 1,
+            "payload": {
+              "type": "string",
+              "value": "fallbackValue"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Feature.strategy.numeric.variants",
+        "description": "Strategy variants with numeric payload",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "flexibleRollout",
+            "parameters": {
+              "rollout": "100",
+              "stickiness": "default",
+              "groupId": "a"
+            },
+            "variants": [
+              {
+                "name": "variantNameA",
+                "weight": 1,
+                "payload": {
+                  "type": "number",
+                  "value": "1.2"
+                }
+              },
+              {
+                "name": "variantNameB",
+                "weight": 1,
+                "payload": {
+                  "type": "number",
+                  "value": "1"
+                }
+              }
+            ],
+            "constraints": []
+          }
+        ],
+        "variants": []
+      },
+      {
+        "name": "Feature.strategy.no.strategy.variants",
+        "description": "Toggle with no strategy variants",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "flexibleRollout",
+            "parameters": {
+              "rollout": "100",
+              "stickiness": "default",
+              "groupId": "a"
+            },
+            "variants": [],
+            "constraints": []
+          }
+        ],
+        "variants": [
+          {
+            "name": "variantNameA",
+            "weight": 1,
+            "payload": {
+              "type": "number",
+              "value": "1"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Feature.strategy.variants.stickiness",
+        "description": "Strategy variants with stickiness inherited from the strategy",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "flexibleRollout",
+            "parameters": {
+              "rollout": "100",
+              "stickiness": "clientId",
+              "groupId": "a"
+            },
+            "variants": [
+              {
+                "name": "variantNameA",
+                "weight": 1,
+                "payload": {
+                  "type": "string",
+                  "value": "variantValueA"
+                }
+              },
+              {
+                "name": "variantNameB",
+                "weight": 1,
+                "payload": {
+                  "type": "string",
+                  "value": "variantValueB"
+                }
+              }
+            ],
+            "constraints": []
+          }
+        ],
+        "variants": []
+      }
+    ]
+  },
+  "variantTests": [
+    {
+      "description": "Feature.strategy.variant should return variant on enabled toggle",
+      "context": {
+        "environment": "dev"
+      },
+      "toggleName": "Feature.strategy.variant.with.constraint",
+      "expectedResult": {
+        "name": "variantName",
+        "payload": {
+          "type": "string",
+          "value": "variantValue"
+        },
+        "enabled": true,
+        "feature_enabled": true
+      }
+    },
+    {
+      "description": "Feature.strategy.variant should return disabled variant on disabled toggle",
+      "context": {
+        "environment": "not-dev"
+      },
+      "toggleName": "Feature.strategy.variant.with.constraint",
+      "expectedResult": {
+        "name": "disabled",
+        "enabled": false,
+        "feature_enabled": false
+      }
+    },
+    {
+      "description": "Feature.strategy.variant.overrides.feature.variant should override feature variant",
+      "context": {
+        "environment": "dev"
+      },
+      "toggleName": "Feature.strategy.variant.overrides.feature.variant",
+      "expectedResult": {
+        "name": "variantName",
+        "payload": {
+          "type": "string",
+          "value": "variantValue"
+        },
+        "enabled": true,
+        "feature_enabled": true
+      }
+    },
+    {
+      "description": "Feature.strategy.multiple.variants should choose first variant",
+      "context": {
+        "userId": "5"
+      },
+      "toggleName": "Feature.strategy.multiple.variants",
+      "expectedResult": {
+        "name": "variantNameA",
+        "payload": {
+          "type": "string",
+          "value": "variantValueA"
+        },
+        "enabled": true,
+        "feature_enabled": true
+      }
+    },
+    {
+      "description": "Feature.strategy.multiple.variants should choose second variant",
+      "context": {
+        "userId": "0"
+      },
+      "toggleName": "Feature.strategy.multiple.variants",
+      "expectedResult": {
+        "name": "variantNameB",
+        "payload": {
+          "type": "string",
+          "value": "variantValueB"
+        },
+        "enabled": true,
+        "feature_enabled": true
+      }
+    },
+    {
+      "description": "Feature.strategy.empty.variants should return disabled variant",
+      "context": {},
+      "toggleName": "Feature.strategy.empty.variants",
+      "expectedResult": {
+        "name": "disabled",
+        "enabled": false,
+        "feature_enabled": true
+      }
+    },
+    {
+      "description": "Feature.strategy.variant.fallback should fall back to feature variants",
+      "context": {},
+      "toggleName": "Feature.strategy.variant.fallback",
+      "expectedResult": {
+        "name": "featureVariant",
+        "payload": {
+          "type": "string",
+          "value": "fallbackValue"
+        },
+        "enabled": true,
+        "feature_enabled": true
+      }
+    },
+    {
+      "description": "Feature.strategy.numeric.variants should choose second variant",
+      "context": {
+        "userId": "0"
+      },
+      "toggleName": "Feature.strategy.numeric.variants",
+      "expectedResult": {
+        "name": "variantNameB",
+        "payload": {
+          "type": "number",
+          "value": "1"
+        },
+        "enabled": true,
+        "feature_enabled": true
+      }
+    },
+    {
+      "description": "Feature.strategy.no.strategy.variants should fall back to base variants",
+      "context": {
+        "userId": "0"
+      },
+      "toggleName": "Feature.strategy.no.strategy.variants",
+      "expectedResult": {
+        "name": "variantNameA",
+        "payload": {
+          "type": "number",
+          "value": "1"
+        },
+        "enabled": true,
+        "feature_enabled": true
+      }
+    },
+    {
+      "description": "Feature.strategy.variants.stickiness should inherit stickiness from the strategy - first variant",
+      "context": {
+        "properties": {
+          "clientId": "1"
+        }
+      },
+      "toggleName": "Feature.strategy.variants.stickiness",
+      "expectedResult": {
+        "name": "variantNameA",
+        "payload": {
+          "type": "string",
+          "value": "variantValueA"
+        },
+        "enabled": true,
+        "feature_enabled": true
+      }
+    },
+    {
+      "description": "Feature.strategy.variants.stickiness should inherit stickiness from the strategy - second variant",
+      "context": {
+        "properties": {
+          "clientId": "2"
+        }
+      },
+      "toggleName": "Feature.strategy.variants.stickiness",
+      "expectedResult": {
+        "name": "variantNameB",
+        "payload": {
+          "type": "string",
+          "value": "variantValueB"
+        },
+        "enabled": true,
+        "feature_enabled": true
+      }
+    }
+  ]
+}

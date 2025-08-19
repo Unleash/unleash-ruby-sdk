@@ -1,0 +1,97 @@
+{
+  "name": "06-remote-address-strategy",
+  "state": {
+    "version": 1,
+    "features": [
+      {
+        "name": "Feature.remoteAddress.A",
+        "description": "Enabled toggle for localhost",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "remoteAddress",
+            "parameters": {
+              "IPs": "127.0.0.1"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Feature.remoteAddress.B",
+        "description": "Enabled toggle for list of IPs",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "remoteAddress",
+            "parameters": {
+              "IPs": "192.168.0.1, 192.168.0.2, 192.168.0.3"
+            }
+          }
+        ]
+      }
+      ,
+      {
+        "name": "Feature.remoteAddress.C",
+        "description": "Ignore invalid IP's in list",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "remoteAddress",
+            "parameters": {
+              "IPs": "192.168.0.1, 192.invalid, 192.168.0.2, 192.168.0.3"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "tests": [
+    {
+      "description": "Feature.remoteAddress.A should be enabled for localhost",
+      "context": {
+        "remoteAddress": "127.0.0.1"
+      },
+      "toggleName": "Feature.remoteAddress.A",
+      "expectedResult": true
+    },
+    {
+      "description": "Feature.remoteAddress.A should not be enabled for missing remoteAddress on context",
+      "context": {},
+      "toggleName": "Feature.remoteAddress.A",
+      "expectedResult": false
+    },
+    {
+      "description": "Feature.remoteAddress.B should be enabled for remoteAddress 192.168.0.1",
+      "context": {
+        "remoteAddress": "192.168.0.1"
+      },
+      "toggleName": "Feature.remoteAddress.B",
+      "expectedResult": true
+    },
+    {
+      "description": "Feature.remoteAddress.B should not be enabled for remoteAddress 192.168.0.3",
+      "context": {
+        "remoteAddress": "192.168.0.3"
+      },
+      "toggleName": "Feature.remoteAddress.B",
+      "expectedResult": true
+    },
+    {
+      "description": "Feature.remoteAddress.B should not be enabled for remoteAddress 217.100.10.11",
+      "context": {
+        "remoteAddress": "217.100.10.11"
+      },
+      "toggleName": "Feature.remoteAddress.B",
+      "expectedResult": false
+    },
+    {
+      "description": "Feature.remoteAddress.C should be enabled for remoteAddress 192.168.0.3",
+      "context": {
+        "remoteAddress": "192.168.0.3"
+      },
+      "toggleName": "Feature.remoteAddress.C",
+      "expectedResult": true
+    }
+  ]
+}
+

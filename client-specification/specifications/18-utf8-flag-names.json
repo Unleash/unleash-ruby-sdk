@@ -1,0 +1,42 @@
+{
+  "name": "18-utf8-flag-names",
+  "state": {
+    "version": 1,
+    "features": [
+      {
+        "name": "Feature.UTF-8.Hellø_Wørld",
+        "description": "Enabled basic UTF-8 toggle",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "default"
+          }
+        ]
+      },
+      {
+        "name": "Feature.UTF-8.😊_φriend_你好_🌍",
+        "description": "Enabled complex UTF-8 toggle",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "default"
+          }
+        ]
+      }
+    ]
+  },
+  "tests": [
+    {
+      "description": "Feature.UTF-8.Hellø_Wørld feature toggle should be enabled",
+      "context": {},
+      "toggleName": "Feature.UTF-8.Hellø_Wørld",
+      "expectedResult": true
+    },
+    {
+      "description": "Feature.UTF-8.😊_φriend_你好_🌍 feature toggle should be enabled",
+      "context": {},
+      "toggleName": "Feature.UTF-8.😊_φriend_你好_🌍",
+      "expectedResult": true
+    }
+  ]
+}

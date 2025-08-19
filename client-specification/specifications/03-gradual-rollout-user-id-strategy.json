@@ -1,0 +1,112 @@
+{
+  "name": "03-gradual-rollout-user-id-strategy",
+  "state": {
+    "version": 1,
+    "features": [
+      {
+        "name": "Feature.A3",
+        "description": "Enabled toggle for 100%",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "gradualRolloutUserId",
+            "parameters": {
+              "percentage": "100",
+              "groupId": "AB12A"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Feature.B3",
+        "description": "Enabled toggle for 50%",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "gradualRolloutUserId",
+            "parameters": {
+              "percentage": "50",
+              "groupId": "AB12A"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Feature.C3",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "gradualRolloutUserId",
+            "parameters": {
+              "percentage": "0",
+              "groupId": "AB12A"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Feature.D3",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "gradualRolloutUserId",
+            "parameters": {
+              "percentage": "0",
+              "groupId": "AB12A"
+            }
+          },
+          {
+            "name": "default"
+          }
+        ]
+      }
+    ]
+  },
+  "tests": [
+    {
+      "description": "Feature.A3 should be enabled for user on context",
+      "context": {
+        "userId": "123"
+      },
+      "toggleName": "Feature.A3",
+      "expectedResult": true
+    },
+    {
+      "description": "Feature.A3 should be disabled when no user on context",
+      "context": {},
+      "toggleName": "Feature.A3",
+      "expectedResult": false
+    },
+    {
+      "description": "Feature.B3 should be enabled for userId=122",
+      "context": {
+        "userId": "122"
+      },
+      "toggleName": "Feature.B3",
+      "expectedResult": true
+    },
+    {
+      "description": "Feature.B3 should be disabled for userId=155",
+      "context": {
+        "userId": "155"
+      },
+      "toggleName": "Feature.B3",
+      "expectedResult": false
+    },
+    {
+      "description": "Feature.C3 should be disabled",
+      "context": {
+        "userId": "122"
+      },
+      "toggleName": "Feature.C3",
+      "expectedResult": false
+    },
+    {
+      "description": "Feature.D3 should be enabled for all because of default strategy",
+      "context": {},
+      "toggleName": "Feature.D3",
+      "expectedResult": true
+    }
+  ]
+}
+

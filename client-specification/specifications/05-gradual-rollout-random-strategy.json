@@ -1,0 +1,89 @@
+{
+  "name": "05-gradual-rollout-random-strategy",
+  "state": {
+    "version": 1,
+    "features": [
+      {
+        "name": "Feature.A5",
+        "description": "Enabled toggle for 100%",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "gradualRolloutRandom",
+            "parameters": {
+              "percentage": "100"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Feature.B5",
+        "description": "Disabled toggle with 0% rollout",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "gradualRolloutRandom",
+            "parameters": {
+              "percentage": "0"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Feature.C5",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "gradualRolloutRandom",
+            "parameters": {
+              "percentage": "0"
+            }
+          },
+          {
+            "name": "default"
+          }
+        ]
+      },
+      {
+        "name": "Feature.D5",
+        "description": "Disabled toggle should be disabled",
+        "enabled": false,
+        "strategies": [
+          {
+            "name": "gradualRolloutRandom",
+            "parameters": {
+              "percentage": "100"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "tests": [
+    {
+      "description": "Feature.A5 should be enabled",
+      "context": {},
+      "toggleName": "Feature.A5",
+      "expectedResult": true
+    },
+    {
+      "description": "Feature.B5 should be disabled",
+      "context": {},
+      "toggleName": "Feature.B5",
+      "expectedResult": false
+    },
+    {
+      "description": "Feature.C5 should be enabled because of default strategy",
+      "context": {},
+      "toggleName": "Feature.C5",
+      "expectedResult": true
+    },
+    {
+      "description": "Feature.D5 should be disabled",
+      "context": {},
+      "toggleName": "Feature.D5",
+      "expectedResult": false
+    }
+  ]
+}
+

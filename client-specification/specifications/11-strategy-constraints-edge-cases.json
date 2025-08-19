@@ -1,0 +1,102 @@
+{
+    "name": "11-strategy-constraints-edge-cases",
+    "state": {
+        "version": 1,
+        "features": [
+            {
+                "name": "Feature.constraints.no_values",
+                "description": "Not enabled with constraints and no values",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "environment",
+                                "operator": "IN",
+                                "values": []
+
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Feature.constraints.no_values_NOT_IN",
+                "description": "Is enabled with constraints and NOT_IN empty values",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "environment",
+                                "operator": "NOT_IN",
+                                "values": []
+
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Feature.constraints.empty",
+                "description": "Is enabled with empty constraints array",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": []
+                    }
+                ]
+            }
+        ]
+    },
+    "tests": [
+        {
+          "description": "Feature.constraints.no_value should not be enabled in default environment",
+          "context": {
+              "environment": "default"
+          },
+          "toggleName": "Feature.constraints.no_values",
+          "expectedResult": false
+        },
+        {
+            "description": "Feature.constraints.no_value should not be enabled in empty environment",
+            "context": {},
+            "toggleName": "Feature.constraints.no_values",
+            "expectedResult": false
+        },
+        {
+            "description": "Feature.constraints.no_values_NOT_IN should be enabled in default environment",
+            "context": {
+                "environment": "default"
+            },
+            "toggleName": "Feature.constraints.no_values_NOT_IN",
+            "expectedResult": true
+        },
+        {
+            "description": "Feature.constraints.no_values_NOT_IN should be enabled in empty environment",
+            "context": {},
+            "toggleName": "Feature.constraints.no_values_NOT_IN",
+            "expectedResult": true
+        },
+        {
+            "description": "Feature.constraints.empty should be enabled",
+            "context": {
+                "environment": "default"
+            },
+            "toggleName": "Feature.constraints.empty",
+            "expectedResult": true
+        },
+        {
+            "description": "Feature.constraints.empty should be enabled for empty env",
+            "context": {},
+            "toggleName": "Feature.constraints.empty",
+            "expectedResult": true
+        }
+    ]
+}

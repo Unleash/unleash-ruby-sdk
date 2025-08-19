@@ -1,0 +1,67 @@
+{
+    "name": "19-delta-api-hydration",
+    "state": {
+        "events": [
+            {
+                "eventId": 1,
+                "type": "hydration",
+                "segments": [
+                    {
+                        "id": 1,
+                        "name": "delta.api.hydration.segment",
+                        "constraints": [
+                            {
+                                "values": [
+                                    "abc",
+                                    "edf",
+                                    "gbd"
+                                ],
+                                "inverted": false,
+                                "operator": "IN",
+                                "contextName": "appName",
+                                "caseInsensitive": false
+                            }
+                        ]
+                    }
+                ],
+                "features": [
+                    {
+                        "impressionData": false,
+                        "enabled": true,
+                        "name": "delta.api.hydration",
+                        "description": null,
+                        "project": "default",
+                        "stale": false,
+                        "type": "release",
+                        "variants": [],
+                        "segments": [
+                            1
+                        ],
+                        "strategies": [
+                            {
+                                "name": "flexibleRollout",
+                                "constraints": [],
+                                "parameters": {
+                                    "groupId": "delta.api.hydration",
+                                    "rollout": "100",
+                                    "stickiness": "default"
+                                },
+                                "variants": []
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "tests": [
+        {
+            "description": "Hydration feature should be enabled when context criteria are met",
+            "context": {
+                "appName": "abc"
+            },
+            "toggleName": "delta.api.hydration",
+            "expectedResult": true
+        }
+    ]
+}

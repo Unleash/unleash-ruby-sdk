@@ -1,0 +1,182 @@
+{
+    "name": "12-custom-stickiness",
+    "state": {
+        "version": 1,
+        "features": [
+            {
+                "name": "Feature.flexible.rollout.custom.stickiness_100",
+                "description": "Should support custom stickiness as option",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "flexibleRollout",
+                        "parameters": {
+                            "rollout": "100",
+                            "stickiness": "customField",
+                            "groupId": "Feature.flexible.rollout.custom.stickiness_100"
+                        },
+                        "constraints": []
+                    }
+                ],
+                "variants": [
+                    {
+                        "name": "blue",
+                        "weight": 25,
+                        "stickiness": "customField",
+                        "payload": {
+                            "type": "string",
+                            "value": "val1"
+                        }
+                    },
+                    {
+                        "name": "red",
+                        "weight": 25,
+                        "stickiness": "customField",
+                        "payload": {
+                            "type": "string",
+                            "value": "val1"
+                        }
+                    },
+                    {
+                        "name": "green",
+                        "weight": 25,
+                        "stickiness": "customField",
+                        "payload": {
+                            "type": "string",
+                            "value": "val1"
+                        }
+                    },
+                    {
+                        "name": "yellow",
+                        "weight": 25,
+                        "stickiness": "customField",
+                        "payload": {
+                            "type": "string",
+                            "value": "val1"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "Feature.flexible.rollout.custom.stickiness_50",
+                "description": "Should support custom stickiness as option",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "flexibleRollout",
+                        "parameters": {
+                            "rollout": "50",
+                            "stickiness": "customField",
+                            "groupId": "Feature.flexible.rollout.custom.stickiness_50"
+                        },
+                        "constraints": []
+                    }
+                ]
+            }
+        ]
+    },
+    "tests": [
+        {
+          "description": "Feature.flexible.rollout.custom.stickiness_100 should be enabled without field defined for 100%",
+          "context": { "properties": {"customField": "any_value"}},
+          "toggleName": "Feature.flexible.rollout.custom.stickiness_100",
+          "expectedResult": true
+        },
+        {
+            "description": "Feature.flexible.rollout.custom.stickiness_50 should not be enabled without custom field",
+            "context": {},
+            "toggleName": "Feature.flexible.rollout.custom.stickiness_50",
+            "expectedResult": false
+        },
+        {
+            "description": "Feature.flexible.rollout.custom.stickiness_50 should not enabled for customField=402",
+            "context": {
+                "properties": {"customField": "402"}
+            },
+            "toggleName": "Feature.flexible.rollout.custom.stickiness_50",
+            "expectedResult": false
+        },
+        {
+            "description": "Feature.flexible.rollout.custom.stickiness_50 should be enabled for customField=388",
+            "context": {
+                "properties": {"customField": "388"}
+            },
+            "toggleName": "Feature.flexible.rollout.custom.stickiness_50",
+            "expectedResult": true
+        },
+        {
+            "description": "Feature.flexible.rollout.custom.stickiness_50 should be enabled for customField=39",
+            "context": {
+                "properties": {"customField": "39"}
+            },
+            "toggleName": "Feature.flexible.rollout.custom.stickiness_50",
+            "expectedResult": true
+        }
+    ],
+    "variantTests": [
+        {
+            "description": "Feature.flexible.rollout.custom.stickiness_100 and customField=616 yields blue",
+            "context": {
+                "properties": {"customField": "616"}
+            },
+            "toggleName": "Feature.flexible.rollout.custom.stickiness_100",
+            "expectedResult": {
+                "name": "blue",
+                "payload": {
+                    "type": "string",
+                    "value": "val1"
+                },
+                "enabled": true,
+                "feature_enabled": true
+            }
+        },
+        {
+            "description": "Feature.flexible.rollout.custom.stickiness_100 and customField=503 yields red",
+            "context": {
+                "properties": {"customField": "503"}
+            },
+            "toggleName": "Feature.flexible.rollout.custom.stickiness_100",
+            "expectedResult": {
+                "name": "red",
+                "payload": {
+                    "type": "string",
+                    "value": "val1"
+                },
+                "enabled": true,
+                "feature_enabled": true
+            }
+        },
+        {
+            "description": "Feature.flexible.rollout.custom.stickiness_100 and customField=438 yields green",
+            "context": {
+                "properties": {"customField": "438"}
+            },
+            "toggleName": "Feature.flexible.rollout.custom.stickiness_100",
+            "expectedResult": {
+                "name": "green",
+                "payload": {
+                    "type": "string",
+                    "value": "val1"
+                },
+                "enabled": true,
+                "feature_enabled": true
+            }
+        },
+        {
+            "description": "Feature.flexible.rollout.custom.stickiness_100 and customField=44 yields yellow",
+            "context": {
+                "properties": {"customField": "44"}
+            },
+            "toggleName": "Feature.flexible.rollout.custom.stickiness_100",
+            "expectedResult": {
+                "name": "yellow",
+                "payload": {
+                    "type": "string",
+                    "value": "val1"
+                },
+                "enabled": true,
+                "feature_enabled": true
+            }
+        }
+    ]
+}

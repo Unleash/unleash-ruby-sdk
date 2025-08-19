@@ -1,0 +1,112 @@
+{
+    "name": "20-delta-api-events",
+    "state": {
+        "events": [
+            {
+                "eventId": 1,
+                "type": "feature-updated",
+                "feature": {
+                    "impressionData": false,
+                    "enabled": true,
+                    "name": "delta.api.events.updated.1",
+                    "description": null,
+                    "project": "default",
+                    "stale": false,
+                    "type": "release",
+                    "variants": [],
+                    "strategies": [
+                        {
+                            "name": "default"
+                        }
+                    ]
+                }
+            },
+            {
+                "eventId": 2,
+                "type": "feature-updated",
+                "feature": {
+                    "impressionData": false,
+                    "enabled": true,
+                    "name": "delta.api.events.updated.2",
+                    "description": null,
+                    "project": "default",
+                    "stale": false,
+                    "type": "release",
+                    "variants": [],
+                    "strategies": [
+                        {
+                            "name": "default"
+                        }
+                    ]
+                }
+            },
+            {
+                "eventId": 3,
+                "type": "feature-removed",
+                "featureName": "delta.api.events.updated.2",
+                "project" : "default"
+            },
+            {
+            "eventId": 4,
+            "type": "segment-updated",
+            "segment": {
+                "id": 1,
+                "name": "my-segment",
+                "constraints": [
+                        {
+                            "values": [
+                                "abc",
+                                "edf",
+                                "gbd"
+                            ],
+                            "inverted": false,
+                            "operator": "IN",
+                            "contextName": "appName",
+                            "caseInsensitive": false
+                        }
+                    ]
+                }
+            },
+            {
+                "eventId": 5,
+                "type": "feature-updated",
+                "feature": {
+                    "impressionData": false,
+                    "enabled": true,
+                    "name": "delta.api.events.updated.3",
+                    "description": null,
+                    "project": "default",
+                    "stale": false,
+                    "type": "release",
+                    "variants": [],
+                    "strategies": [
+                        {
+                            "name": "default",
+                            "segments": [1]
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "tests": [
+        {
+            "description": "delta.api.events.updated.1 should be enabled",
+            "context": {},
+            "toggleName": "delta.api.events.updated.1",
+            "expectedResult": true
+        },
+        {
+            "description": "delta.api.events.updated.2 should be disabled",
+            "context": {},
+            "toggleName": "delta.api.events.updated.2",
+            "expectedResult": false
+        },
+        {
+            "description": "delta.api.events.updated.3 should be enabled with segment",
+            "context": { "appName": "abc" },
+            "toggleName": "delta.api.events.updated.3",
+            "expectedResult": true
+        }
+    ]
+}

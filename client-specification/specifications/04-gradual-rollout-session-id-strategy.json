@@ -1,0 +1,112 @@
+{
+  "name": "04-gradual-rollout-session-id-strategy",
+  "state": {
+    "version": 1,
+    "features": [
+      {
+        "name": "Feature.A4",
+        "description": "Enabled toggle for 100%",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "gradualRolloutSessionId",
+            "parameters": {
+              "percentage": "100",
+              "groupId": "AB12A"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Feature.B4",
+        "description": "Enabled toggle for 50%",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "gradualRolloutSessionId",
+            "parameters": {
+              "percentage": "50",
+              "groupId": "AB12A"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Feature.C4",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "gradualRolloutSessionId",
+            "parameters": {
+              "percentage": "0",
+              "groupId": "AB12A"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Feature.D4",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "gradualRolloutSessionId",
+            "parameters": {
+              "percentage": "0",
+              "groupId": "AB12A"
+            }
+          },
+          {
+            "name": "default"
+          }
+        ]
+      }
+    ]
+  },
+  "tests": [
+    {
+      "description": "Feature.A4 should be enabled for user on context",
+      "context": {
+        "sessionId": "123"
+      },
+      "toggleName": "Feature.A4",
+      "expectedResult": true
+    },
+    {
+      "description": "Feature.A4 should be disabled when no user on context",
+      "context": {},
+      "toggleName": "Feature.A4",
+      "expectedResult": false
+    },
+    {
+      "description": "Feature.B4 should be enabled for sessionId=122",
+      "context": {
+        "sessionId": "122"
+      },
+      "toggleName": "Feature.B4",
+      "expectedResult": true
+    },
+    {
+      "description": "Feature.B4 should be disabled for sessionId=155",
+      "context": {
+        "sessionId": "155"
+      },
+      "toggleName": "Feature.B4",
+      "expectedResult": false
+    },
+    {
+      "description": "Feature.C4 should be disabled",
+      "context": {
+        "sessionId": "122"
+      },
+      "toggleName": "Feature.C4",
+      "expectedResult": false
+    },
+    {
+      "description": "Feature.D4 should be enabled for all because of default strategy",
+      "context": {},
+      "toggleName": "Feature.D4",
+      "expectedResult": true
+    }
+  ]
+}
+

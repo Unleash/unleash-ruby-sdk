@@ -1,0 +1,102 @@
+{
+  "name": "02-user-with-id-strategy",
+  "state": {
+    "version": 1,
+    "features": [
+      {
+        "name": "Feature.A2",
+        "description": "Enabled toggle",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "userWithId",
+            "parameters": {
+              "userIds": "123"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Feature.B2",
+        "description": "Disabled toggle",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "userWithId",
+            "parameters": {
+              "userIds": "123"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Feature.C2",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "userWithId",
+            "parameters": {
+              "userIds": "123"
+            }
+          },
+          {
+            "name": "default"
+          }
+        ]
+      },
+      {
+        "name": "Feature.D2",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "userWithId",
+            "parameters": {
+              "userIds": "123, 222, 88"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "tests": [
+    {
+      "description": "Feature.A2 Should be enabled for user on context",
+      "context": {
+        "userId": "123"
+      },
+      "toggleName": "Feature.A2",
+      "expectedResult": true
+    },
+    {
+      "description": "Feature.A2 Should not be enabled for user not in context",
+      "context": {
+        "userId": "22"
+      },
+      "toggleName": "Feature.A2",
+      "expectedResult": false
+    },
+    {
+      "description": "Feature.C2 Should not be enabled for for everyone",
+      "context": {
+        "userId": "22"
+      },
+      "toggleName": "Feature.C2",
+      "expectedResult": true
+    },
+    {
+      "description": "Feature.D2 Should not be enabled for user in list",
+      "context": {
+        "userId": "222"
+      },
+      "toggleName": "Feature.D2",
+      "expectedResult": true
+    },
+    {
+      "description": "Feature.A2 Should be disabled when no userId on context",
+      "context": {},
+      "toggleName": "Feature.A2",
+      "expectedResult": false
+    }
+  ]
+}
+

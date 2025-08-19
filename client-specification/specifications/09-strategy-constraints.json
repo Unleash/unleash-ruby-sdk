@@ -1,0 +1,367 @@
+{
+    "name": "09-strategy-constraints",
+    "state": {
+        "version": 1,
+        "features": [
+            {
+                "name": "Feature.constraints.simple",
+                "description": "Enabled only in dev",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "environment",
+                                "operator": "IN",
+                                "values": ["dev"]
+
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Feature.constraints.list",
+                "description": "Enabled in dev, stage, prod",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "environment",
+                                "operator": "IN",
+                                "values": ["dev", "stage", "prod"]
+
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Feature.constraints.multi",
+                "description": "Enabled in prod and only for users 1, 2, 3",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "environment",
+                                "operator": "IN",
+                                "values": ["prod"]
+
+                            },
+                            {
+                                "contextName": "userId",
+                                "operator": "IN",
+                                "values": ["1", "2", "3"]
+
+                            },
+                            {
+                                "contextName": "appName",
+                                "operator": "NOT_IN",
+                                "values": ["web", "sun-app"]
+
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Feature.constraints.userWithId",
+                "description": "Enabled in prod for userWithId=123",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "userWithId",
+                        "parameters": {
+                            "userIds": "123"
+                        },
+                        "constraints": [
+                            {
+                                "contextName": "environment",
+                                "operator": "IN",
+                                "values": ["prod"]
+
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Feature.constraints.custom",
+                "description": "Enabled in prod in country IN (norway or sweeden)",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "environment",
+                                "operator": "IN",
+                                "values": ["prod"]
+
+                            },
+                            {
+                                "contextName": "country",
+                                "operator": "IN",
+                                "values": ["norway", "sweeden"]
+
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Feature.constraints.dual",
+                "description": "Enabled in prod and not in qa and dev",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "environment",
+                                "operator": "IN",
+                                "values": ["prod", "dev"]
+
+                            },
+                            {
+                                "contextName": "environment",
+                                "operator": "NOT_IN",
+                                "values": ["dev", "qa"]
+
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Feature.constraints.empty",
+                "description": "Always disabled for empty list of values",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "environment",
+                                "operator": "IN",
+                                "values": []
+
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Feature.constraints.empty-not-in",
+                "description": "Always enabled for value not in empty list",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "environment",
+                                "operator": "NOT_IN",
+                                "values": []
+
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Feature.constraints.multiple.strategies",
+                "description": "Feature constraints has multiple strategies",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "userId",
+                                "operator": "IN",
+                                "values": ["123"]
+
+                            }
+                        ]
+                    },
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "userId",
+                                "operator": "IN",
+                                "values": ["456"]
+
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "tests": [
+        {
+          "description": "Feature.constraints.simple should not be enabled in default environment",
+          "context": {
+              "environment": "default"
+          },
+          "toggleName": "Feature.constraints.simple",
+          "expectedResult": false
+        },
+        {
+            "description": "Feature.constraints.simple should be enabled in dev environment",
+            "context": {
+                "environment": "dev"
+            },
+            "toggleName": "Feature.constraints.simple",
+            "expectedResult": true
+        },
+        {
+            "description": "Feature.constraints.list should be enabled in stage environment",
+            "context": {
+                "environment": "stage"
+            },
+            "toggleName": "Feature.constraints.list",
+            "expectedResult": true
+        },
+        {
+            "description": "Feature.constraints.list should NOT be enabled in qa environment",
+            "context": {
+                "environment": "qa"
+            },
+            "toggleName": "Feature.constraints.list",
+            "expectedResult": false
+        },
+        {
+            "description": "Feature.constraints.multi should be enabled in prod for user 2",
+            "context": {
+                "environment": "prod",
+                "userId": "2"
+            },
+            "toggleName": "Feature.constraints.multi",
+            "expectedResult": true
+        },
+        {
+            "description": "Feature.constraints.multi should NOT be enabled for unknown user",
+            "context": {
+                "environment": "prod"
+            },
+            "toggleName": "Feature.constraints.multi",
+            "expectedResult": false
+        },
+        {
+            "description": "Feature.constraints.multi should NOT be enabled appName=web",
+            "context": {
+                "environment": "prod",
+                "userId": "2",
+                "appName": "web"
+            },
+            "toggleName": "Feature.constraints.multi",
+            "expectedResult": false
+        },
+        {
+            "description": "Feature.constraints.custom should be enabled in prod for norway",
+            "context": {
+                "environment": "prod",
+                "properties": {
+                    "country": "norway"
+                }
+            },
+            "toggleName": "Feature.constraints.custom",
+            "expectedResult": true
+        },
+        {
+            "description": "Feature.constraints.custom should NOT be enabled in prod for denmark",
+            "context": {
+                "environment": "prod",
+                "properties": {
+                    "country": "denmark"
+                }
+            },
+            "toggleName": "Feature.constraints.custom",
+            "expectedResult": false
+        },
+        {
+            "description": "Feature.constraints.dual should be enabled in prod",
+            "context": {
+                "environment": "prod"
+            },
+            "toggleName": "Feature.constraints.dual",
+            "expectedResult": true
+        },
+        {
+            "description": "Feature.constraints.dual should not be enabled in dev",
+            "context": {
+                "environment": "dev"
+            },
+            "toggleName": "Feature.constraints.dual",
+            "expectedResult": false
+        },
+        {
+            "description": "Feature.constraints.empty should always be disabled",
+            "context": {
+                "environment": "dev"
+            },
+            "toggleName": "Feature.constraints.empty",
+            "expectedResult": false
+        },
+        {
+            "description": "Always enabled for value not in empty list",
+            "context": {
+                "environment": "dev"
+            },
+            "toggleName": "Feature.constraints.empty-not-in",
+            "expectedResult": true
+        },
+        {
+            "description": "Enabled in prod for userId=123",
+            "context": {
+                "environment": "prod",
+                "userId": "123"
+            },
+            "toggleName": "Feature.constraints.userWithId",
+            "expectedResult": true
+        },
+        {
+            "description": "Disabled in dev for userId=123",
+            "context": {
+                "environment": "dev",
+                "userId": "123"
+            },
+            "toggleName": "Feature.constraints.userWithId",
+            "expectedResult": false
+        },
+        {
+            "description": "Disabled in prod for userId=44",
+            "context": {
+                "environment": "prod",
+                "userId": "44"
+            },
+            "toggleName": "Feature.constraints.userWithId",
+            "expectedResult": false
+        },
+        {
+            "description": "Constraint should work with the latter strategy",
+            "context": {
+                "userId": "456"
+            },
+            "toggleName": "Feature.constraints.multiple.strategies",
+            "expectedResult": true
+        }
+    ]
+}

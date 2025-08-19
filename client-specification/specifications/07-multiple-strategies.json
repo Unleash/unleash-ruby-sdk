@@ -1,0 +1,114 @@
+{
+  "name": "07-multiple-strategies",
+  "state": {
+    "version": 1,
+    "features": [
+      {
+        "name": "Feature.multiStrategies.A",
+        "description": "Enabled for via last stratgy",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "gradualRolloutRandom",
+            "parameters": {
+              "percentage": "0"
+            }
+          },
+          {
+            "name": "default",
+            "parameters": {}
+          }
+        ]
+      },
+      {
+        "name": "Feature.multiStrategies.B",
+        "description": "Enabled for user=123",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "gradualRolloutRandom",
+            "parameters": {
+              "percentage": "0"
+            }
+          },
+          {
+            "name": "userWithId",
+            "parameters": {
+              "userIds": "123"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Feature.multiStrategies.C",
+        "description": "Enabled for user=123",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "gradualRolloutRandom",
+            "parameters": {
+              "percentage": "0"
+            }
+          },
+          {
+            "name": "userWithId",
+            "parameters": {
+              "userIds": "123"
+            }
+          },
+          {
+            "name": "gradualRolloutRandom",
+            "parameters": {
+              "percentage": "0"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "tests": [
+    {
+      "description": "Feature.multiStrategies.A should be enabled",
+      "context": {},
+      "toggleName": "Feature.multiStrategies.A",
+      "expectedResult": true
+    },
+    {
+      "description": "Feature.multiStrategies.B disabled for unknonw user",
+      "context": {},
+      "toggleName": "Feature.multiStrategies.B",
+      "expectedResult": false
+    },
+    {
+      "description": "Feature.multiStrategies.B enabled for user=123",
+      "context": {
+        "userId": "123"
+      },
+      "toggleName": "Feature.multiStrategies.B",
+      "expectedResult": true
+    },
+    {
+      "description": "Feature.multiStrategies.C disabled for unknown users",
+      "context": {},
+      "toggleName": "Feature.multiStrategies.C",
+      "expectedResult": false
+    },
+    {
+      "description": "Feature.multiStrategies.C disabled for user=22",
+      "context": {
+        "userId": "22"
+      },
+      "toggleName": "Feature.multiStrategies.C",
+      "expectedResult": false
+    },
+    {
+      "description": "Feature.multiStrategies.C enabled for user=123",
+      "context": {
+        "userId": "123"
+      },
+      "toggleName": "Feature.multiStrategies.C",
+      "expectedResult": true
+    }
+  ]
+}
+

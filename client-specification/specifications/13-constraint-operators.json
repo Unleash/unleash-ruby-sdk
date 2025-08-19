@@ -1,0 +1,903 @@
+{
+    "name": "13-constraint-operators",
+    "state": {
+        "version": 1,
+        "features": [
+            {
+                "name": "F1.startsWith",
+                "description": "startsWith",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "customField",
+                                "operator": "STR_STARTS_WITH",
+                                "values": ["some-string"]
+
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "F2.startsWith.multiple",
+                "description": "starts with",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "customField",
+                                "operator": "STR_STARTS_WITH",
+                                "values": ["e1", "e2"]
+
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "F2.startsWith.caseInsensitve",
+                "description": "starts with case insensitive",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "customField",
+                                "operator": "STR_STARTS_WITH",
+                                "values": ["TEST"],
+                                "caseInsensitive": true
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "F3.endsWith",
+                "description": "endsWith",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "email",
+                                "operator": "STR_ENDS_WITH",
+                                "values": ["some-email.com"]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "F3.endsWith.ignoringCase",
+                "description": "endsWith",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "email",
+                                "operator": "STR_ENDS_WITH",
+                                "values": ["some-email.com"],
+                                "caseInsensitive": true
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "F4.contains",
+                "description": "contains",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "email",
+                                "operator": "STR_CONTAINS",
+                                "values": ["email"]
+
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "F4.contains.inverted",
+                "description": "contains",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "email",
+                                "operator": "STR_CONTAINS",
+                                "values": ["email"],
+                                "inverted": true
+
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "F5.numEq",
+                "description": "contains",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "someValue",
+                                "operator": "NUM_EQ",
+                                "value": "12"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "F5.numEq.float",
+                "description": "contains",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "someValue",
+                                "operator": "NUM_EQ",
+                                "value": "12.0"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "F5.numEq.inverted",
+                "description": "contains",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "someValue",
+                                "operator": "NUM_EQ",
+                                "value": "12",
+                                "inverted": true
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "F5.numGT",
+                "description": "contains",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "someValue",
+                                "operator": "NUM_GT",
+                                "value": "12"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "F5.numGTE",
+                "description": "contains",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "someValue",
+                                "operator": "NUM_GTE",
+                                "value": "12"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "F5.numLT",
+                "description": "contains",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "someValue",
+                                "operator": "NUM_LT",
+                                "value": "12"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "F5.numLTE",
+                "description": "contains",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "someValue",
+                                "operator": "NUM_LTE",
+                                "value": "12"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "F6.number-range",
+                "description": "range of numbers",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "someValue",
+                                "operator": "NUM_GT",
+                                "value": "12"
+                            },
+                            {
+                                "contextName": "someValue",
+                                "operator": "NUM_LT",
+                                "value": "16"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "F7.dateAfter",
+                "description": "dates",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "currentTime",
+                                "operator": "DATE_AFTER",
+                                "value": "2022-01-29T13:00:00.000Z"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "F7.dateBefore",
+                "description": "dates",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "currentTime",
+                                "operator": "DATE_BEFORE",
+                                "value": "2022-01-29T13:00:00.000Z"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "F7.date-range",
+                "description": "dates",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "currentTime",
+                                "operator": "DATE_AFTER",
+                                "value": "2022-01-22T13:00:00.000Z"
+                            },
+                            {
+                                "contextName": "currentTime",
+                                "operator": "DATE_BEFORE",
+                                "value": "2022-01-29T13:00:00.000Z"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "F7.date-with-timezone",
+                "description": "dates",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "currentTime",
+                                "operator": "DATE_AFTER",
+                                "value": "2022-01-22T13:00:00.000+02:00"
+                            },
+                            {
+                                "contextName": "currentTime",
+                                "operator": "DATE_BEFORE",
+                                "value": "2022-01-22T14:00:00.000+02:00"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "F7.invalid-operator",
+                "description": "invalid",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "customField",
+                                "operator": "NOT_A_VALID_OPERATOR",
+                                "value": "2022-01-22T13:00:00.000Z"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "F8.missing-field.IN",
+                "description": "missing field",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "customFieldMissing",
+                                "operator": "IN",
+                                "values": ["s1"]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "F8.missing-field.NOT_IN",
+                "description": "missing field",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "customFieldMissing",
+                                "operator": "NOT_IN",
+                                "values": ["s1"]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "F9.inverted.IN",
+                "description": "inverted IN",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "someValue",
+                                "operator": "IN",
+                                "values": ["s1","s2"],
+                                "inverted": true
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "F10.inverted.NOT_IN",
+                "description": "inverted NOT_IN",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "default",
+                        "parameters": {},
+                        "constraints": [
+                            {
+                                "contextName": "someValue",
+                                "operator": "NOT_IN",
+                                "values": ["s1","s2"],
+                                "inverted": true
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "tests": [
+        {
+          "description": "F1.startsWith should be enabled",
+          "context": {
+              "properties": {
+                  "customField": "some-string-is-cool"
+              }
+          },
+          "toggleName": "F1.startsWith",
+          "expectedResult": true
+        },
+        {
+            "description": "F1.startsWith should be disabled",
+            "context": {
+                "properties": {
+                    "customField": "some2-is-cool-string"
+                }
+            },
+            "toggleName": "F1.startsWith",
+            "expectedResult": false
+        },
+        {
+            "description": "F2.startsWith.multiple should be enabled",
+            "context": {
+                "properties": {
+                    "customField": "e2 cool"
+                }
+            },
+            "toggleName": "F2.startsWith.multiple",
+            "expectedResult": true
+        },
+        {
+            "description": "F2.startsWith.multiple should be disabled",
+            "context": {
+                "properties": {
+                    "customField": "cool e1"
+                }
+            },
+            "toggleName": "F2.startsWith.multiple",
+            "expectedResult": false
+        },
+        {
+            "description": "F2.startsWith.caseInsensitve should be enabled",
+            "context": {
+                "properties": {
+                    "customField": "test@example.com"
+                }
+            },
+            "toggleName": "F2.startsWith.caseInsensitve",
+            "expectedResult": true
+        },
+        {
+            "description": "F2.startsWith.caseInsensitve should handle various cases when enabled",
+            "context": {
+                "properties": {
+                    "customField": "TEsT@example.com"
+                }
+            },
+            "toggleName": "F2.startsWith.caseInsensitve",
+            "expectedResult": true
+        },
+        {
+            "description": "F3.endsWith should be enabled",
+            "context": {
+                "properties": {
+                    "email": "test@some-email.com"
+                }
+            },
+            "toggleName": "F3.endsWith",
+            "expectedResult": true
+        },
+        {
+            "description": "F3.endsWith should be disabled when casing is incorrect",
+            "context": {
+                "properties": {
+                    "email": "test@some-EMAIL.com"
+                }
+            },
+            "toggleName": "F3.endsWith",
+            "expectedResult": false
+        },
+        {
+            "description": "F3.endsWith.ignoringCase should be enabled",
+            "context": {
+                "properties": {
+                    "email": "test@SOME-EMAIL.com"
+                }
+            },
+            "toggleName": "F3.endsWith.ignoringCase",
+            "expectedResult": true
+        },
+        {
+            "description": "F3.endsWith should be disabled",
+            "context": {
+                "properties": {
+                    "email": "test@another-email.com"
+                }
+            },
+            "toggleName": "F3.endsWith",
+            "expectedResult": false
+        },
+        {
+            "description": "F4.contains should be enabled",
+            "context": {
+                "properties": {
+                    "email": "test@some-email.com"
+                }
+            },
+            "toggleName": "F4.contains",
+            "expectedResult": true
+        },
+        {
+            "description": "F4.contains should be disabled",
+            "context": {
+                "properties": {
+                    "email": "test@another.com"
+                }
+            },
+            "toggleName": "F4.contains",
+            "expectedResult": false
+        },
+        {
+            "description": "F4.contains.inverted should be enabled",
+            "context": {
+                "properties": {
+                    "email": "test@another.com"
+                }
+            },
+            "toggleName": "F4.contains.inverted",
+            "expectedResult": true
+        },
+        {
+            "description": "F5.numEq",
+            "context": {
+                "properties": {
+                    "someValue": "12"
+                }
+            },
+            "toggleName":  "F5.numEq",
+            "expectedResult": true
+        },
+        {
+            "description": "F5.numEq works for floats",
+            "context": {
+                "properties": {
+                    "someValue": "12.0"
+                }
+            },
+            "toggleName":  "F5.numEq",
+            "expectedResult": true
+        },
+        {
+            "description": "F5.numEq.inverted should be false",
+            "context": {
+                "properties": {
+                    "someValue": "12"
+                }
+            },
+            "toggleName":  "F5.numEq.inverted",
+            "expectedResult": false
+        },
+        {
+            "description": "F5.numEq.float works for floats",
+            "context": {
+                "properties": {
+                    "someValue": "12.0"
+                }
+            },
+            "toggleName":  "F5.numEq.float",
+            "expectedResult": true
+        },
+        {
+            "description": "F5.numEq.float works for integers",
+            "context": {
+                "properties": {
+                    "someValue": "12"
+                }
+            },
+            "toggleName":  "F5.numEq.float",
+            "expectedResult": true
+        },
+        {
+            "description": "F5.numEq.inverted should be true",
+            "context": {
+                "properties": {
+                    "someValue": "13"
+                }
+            },
+            "toggleName":  "F5.numEq.inverted",
+            "expectedResult": true
+        },
+        {
+            "description": "F5.numGT should be true",
+            "context": {
+                "properties": {
+                    "someValue": "13"
+                }
+            },
+            "toggleName":  "F5.numGT",
+            "expectedResult": true
+        },
+        {
+            "description": "F5.numGT should be false",
+            "context": {
+                "properties": {
+                    "someValue": "12"
+                }
+            },
+            "toggleName":  "F5.numGT",
+            "expectedResult": false
+        },
+        {
+            "description": "F5.numGTE should be true when equal",
+            "context": {
+                "properties": {
+                    "someValue": "12"
+                }
+            },
+            "toggleName":  "F5.numGTE",
+            "expectedResult": true
+        },
+        {
+            "description": "F5.numGTE should be true when larger",
+            "context": {
+                "properties": {
+                    "someValue": "13"
+                }
+            },
+            "toggleName":  "F5.numGTE",
+            "expectedResult": true
+        },
+        {
+            "description": "F5.numGTE should be false when lower",
+            "context": {
+                "properties": {
+                    "someValue": "11"
+                }
+            },
+            "toggleName":  "F5.numGTE",
+            "expectedResult": false
+        },
+        {
+            "description": "F5.numLTE should be false when higher",
+            "context": {
+                "properties": {
+                    "someValue": "13"
+                }
+            },
+            "toggleName":  "F5.numLTE",
+            "expectedResult": false
+        },
+        {
+            "description": "F5.numLTE should be true when equal",
+            "context": {
+                "properties": {
+                    "someValue": "12"
+                }
+            },
+            "toggleName":  "F5.numLTE",
+            "expectedResult": true
+        },
+        {
+            "description": "F5.numLTE should be true when lower",
+            "context": {
+                "properties": {
+                    "someValue": "0"
+                }
+            },
+            "toggleName":  "F5.numLTE",
+            "expectedResult": true
+        },
+        {
+            "description": "F5.numLT should be true when lower",
+            "context": {
+                "properties": {
+                    "someValue": "0"
+                }
+            },
+            "toggleName":  "F5.numLT",
+            "expectedResult": true
+        },
+        {
+            "description": "F5.numLT should be false when equal",
+            "context": {
+                "properties": {
+                    "someValue": "12"
+                }
+            },
+            "toggleName":  "F5.numLT",
+            "expectedResult": false
+        },
+        {
+            "description": "F6.number-range should be false when not in range",
+            "context": {
+                "properties": {
+                    "someValue": "11"
+                }
+            },
+            "toggleName":  "F6.number-range",
+            "expectedResult": false
+        },
+        {
+            "description": "F6.number-range should be true when in range",
+            "context": {
+                "properties": {
+                    "someValue": "14"
+                }
+            },
+            "toggleName":  "F6.number-range",
+            "expectedResult": true
+        },
+        {
+            "description": "F7.dateAfter should be enabled",
+            "context": {
+                "currentTime": "2022-01-30T13:00:00.000Z"
+            },
+            "toggleName":  "F7.dateAfter",
+            "expectedResult": true
+        },
+        {
+            "description": "F7.dateAfter should be disabled",
+            "context": {
+                "currentTime": "2022-01-28T13:00:00.000Z"
+            },
+            "toggleName":  "F7.dateAfter",
+            "expectedResult": false
+        },
+        {
+            "description": "F7.dateAfter is exclusive of date parameter",
+            "context": {
+                "currentTime": "2022-01-29T13:00:00.000Z"
+            },
+            "toggleName":  "F7.dateAfter",
+            "expectedResult": false
+        },
+        {
+            "description": "F7.dateBefore should be enabled",
+            "context": {
+                "currentTime": "2022-01-28T13:00:00.000Z"
+            },
+            "toggleName":  "F7.dateBefore",
+            "expectedResult": true
+        },
+        {
+            "description": "F7.dateBefore should be disabled",
+            "context": {
+                "currentTime": "2022-01-30T13:00:00.000Z"
+            },
+            "toggleName":  "F7.dateBefore",
+            "expectedResult": false
+        },
+        {
+            "description": "F7.dateBefore is exclusive of date parameter",
+            "context": {
+                "currentTime": "2022-01-29T13:00:00.000Z"
+            },
+            "toggleName":  "F7.dateBefore",
+            "expectedResult": false
+        },
+        {
+            "description": "F7.date-range should be enabled",
+            "context": {
+                "currentTime": "2022-01-25T13:00:00.000Z"
+            },
+            "toggleName":  "F7.date-range",
+            "expectedResult": true
+        },
+        {
+            "description": "F7.date-with-timezone should respect timezone",
+            "context": {
+                "currentTime": "2022-01-22T11:30:00.000Z"
+            },
+            "toggleName": "F7.date-with-timezone",
+            "expectedResult": true
+        },
+        {
+            "description": "F7.invalid-operator should always return false",
+            "context": {
+                "properties": {
+                    "someValue": "12"
+                }
+            },
+            "toggleName":  "F7.invalid-operator",
+            "expectedResult": false
+        },
+        {
+            "description": "F8.missing-field.IN should return false",
+            "context": {},
+            "toggleName":  "F8.missing-field.IN",
+            "expectedResult": false
+        },
+        {
+            "description": "F8.missing-field.IN should return true when present",
+            "context": {
+                "properties": {
+                    "customFieldMissing": "s1"
+                }
+            },
+            "toggleName":  "F8.missing-field.IN",
+            "expectedResult": true
+        },
+        {
+            "description": "F8.missing-field.NOT_IN should return true",
+            "context": {},
+            "toggleName":  "F8.missing-field.NOT_IN",
+            "expectedResult": true
+        },
+        {
+            "description": "F8.missing-field.NOT_IN should return true when null",
+            "context": {
+                "properties": {
+                    "customFieldMissing": null
+                }
+            },
+            "toggleName":  "F8.missing-field.NOT_IN",
+            "expectedResult": true
+        },
+        {
+            "description": "F9.inverted.IN should return false when present but inverted",
+            "context": {
+                "properties": {
+                    "someValue": "s1"
+                }
+            },
+            "toggleName":  "F9.inverted.IN",
+            "expectedResult": false
+        },
+        {
+            "description": "F10.inverted.NOT_IN should return true when present but inverted",
+            "context": {
+                "properties": {
+                    "someValue": "s1"
+                }
+            },
+            "toggleName":  "F10.inverted.NOT_IN",
+            "expectedResult": true
+        }
+    ]
+}

@@ -1,0 +1,167 @@
+{
+    "name": "10-flexible-rollout-strategy",
+    "state": {
+        "version": 1,
+        "features": [
+            {
+                "name": "Feature.flexibleRollout.100",
+                "description": "Should be enabled",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "flexibleRollout",
+                        "parameters": {
+                            "rollout": "100",
+                            "stickiness": "default",
+                            "groupId": "Feature.flexibleRollout.100"
+                        },
+                        "constraints": []
+                    }
+                ]
+            },
+            {
+                "name": "Feature.flexibleRollout.10",
+                "description": "Should be enabled",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "flexibleRollout",
+                        "parameters": {
+                            "rollout": "10",
+                            "stickiness": "default",
+                            "groupId": "Feature.flexibleRollout.10"
+                        },
+                        "constraints": []
+                    }
+                ]
+            },
+            {
+                "name": "Feature.flexibleRollout.0",
+                "description": "Should be disabled",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "flexibleRollout",
+                        "parameters": {
+                            "rollout": "0",
+                            "stickiness": "default",
+                            "groupId": "Feature.flexibleRollout.0"
+                        },
+                        "constraints": []
+                    }
+                ]
+            },
+            {
+                "name": "Feature.flexibleRollout.userId.55",
+                "description": "Should be enabled",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "flexibleRollout",
+                        "parameters": {
+                            "rollout": "55",
+                            "stickiness": "userId",
+                            "groupId": "Feature.flexibleRollout.userId.55"
+                        },
+                        "constraints": []
+                    }
+                ]
+            },
+            {
+                "name": "Feature.flexibleRollout.sessionId.42",
+                "description": "Should be enabled",
+                "enabled": true,
+                "strategies": [
+                    {
+                        "name": "flexibleRollout",
+                        "parameters": {
+                            "rollout": "42",
+                            "stickiness": "sessionId",
+                            "groupId": "Feature.flexibleRollout.sessionId.42"
+                        },
+                        "constraints": []
+                    }
+                ]
+            }
+        ]
+    },
+    "tests": [
+        {
+          "description": "Feature.flexibleRollout.100 should always be enabled",
+          "context": {},
+          "toggleName": "Feature.flexibleRollout.100",
+          "expectedResult": true
+        },
+        {
+            "description": "Feature.flexibleRollout.10 should be enabled for userId=174",
+            "context": {
+                "userId": "174"
+            },
+            "toggleName": "Feature.flexibleRollout.10",
+            "expectedResult": true
+        },
+        {
+            "description": "Feature.flexibleRollout.10 should be disabled for userId=499",
+            "context": {
+                "userId": "499"
+            },
+            "toggleName": "Feature.flexibleRollout.10",
+            "expectedResult": false
+        },
+        {
+            "description": "Feature.flexibleRollout.10 should be enabled for sessionId=174",
+            "context": {
+                "sessionId": "174"
+            },
+            "toggleName": "Feature.flexibleRollout.10",
+            "expectedResult": true
+        },
+        {
+            "description": "Feature.flexibleRollout.10 should be disabled for sessionId=499",
+            "context": {
+                "sessionId": "499"
+            },
+            "toggleName": "Feature.flexibleRollout.10",
+            "expectedResult": false
+        },
+        {
+            "description": "Feature.flexibleRollout.userId.55 should be enabled for userId=25",
+            "context": {
+                "userId": "25"
+            },
+            "toggleName": "Feature.flexibleRollout.userId.55",
+            "expectedResult": true
+        },
+        {
+            "description": "Feature.flexibleRollout.userId.55 should be disabled for sessionId=25",
+            "context": {
+                "sessionId": "25"
+            },
+            "toggleName": "Feature.flexibleRollout.userId.55",
+            "expectedResult": false
+        },
+        {
+            "description": "Feature.flexibleRollout.userId.55 should be disabled if no userId in context",
+            "context": {},
+            "toggleName": "Feature.flexibleRollout.userId.55",
+            "expectedResult": false
+        },
+        {
+            "description": "Feature.flexibleRollout.sessionId.42 should be enabled for sessionId=147",
+            "context": {
+                "sessionId": "147"
+            },
+            "toggleName": "Feature.flexibleRollout.sessionId.42",
+            "expectedResult": true
+        },
+        {
+            "description": "Feature.flexibleRollout.0 should be disbaled for rollout=0",
+            "context": {
+                "sessionId": "147",
+                "userId": "12"
+            },
+            "toggleName": "Feature.flexibleRollout.0",
+            "expectedResult": false
+        }
+    ]
+}

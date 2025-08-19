@@ -1,0 +1,1017 @@
+{
+  "name": "17-dependent-features",
+  "state": {
+    "version": 1,
+    "features": [
+      {
+        "name": "parent.enabled",
+        "description": "Parent feature that is always enabled",
+        "enabled": true,
+        "strategies": [{
+          "name": "default"
+        }]
+      },
+      {
+        "name": "parent.disabled",
+        "description": "Parent feature that is always disabled",
+        "enabled": false,
+        "strategies": [{
+          "name": "default"
+        }]
+      },
+      {
+        "name": "parent.with.variant",
+        "description": "Parent feature with variant",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "flexibleRollout",
+            "parameters": {
+              "rollout": "100",
+              "stickiness": "default",
+              "groupId": "parent"
+            },
+            "variants": [
+              {
+                "name": "parent.variant",
+                "weight": 1,
+                "payload": {
+                  "type": "string",
+                  "value": "variantValue"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "parent.with.constraint",
+        "description": "Parent feature with constraint",
+        "enabled": true,
+        "strategies": [
+          {
+            "name": "flexibleRollout",
+            "parameters": {
+              "rollout": "100",
+              "stickiness": "default",
+              "groupId": "parent"
+            },
+            "constraints": [
+              {
+                "contextName": "environment",
+                "operator": "IN",
+                "values": ["prod"]
+
+              }
+            ],
+            "variants": [
+              {
+                "name": "parent.variant",
+                "weight": 1,
+                "payload": {
+                  "type": "string",
+                  "value": "variantValue"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "child.with.matching.constraint",
+        "description": "Child with parent matching constraint",
+        "enabled": true,
+        "dependencies": [{
+          "feature": "parent.with.constraint"
+        }],
+        "strategies": [
+          {
+            "name": "flexibleRollout",
+            "parameters": {
+              "rollout": "100",
+              "stickiness": "default",
+              "groupId": "parent"
+            },
+            "constraints": [
+              {
+                "contextName": "environment",
+                "operator": "IN",
+                "values": ["prod"]
+
+              }
+            ],
+            "variants": [
+              {
+                "name": "child.variant",
+                "weight": 1,
+                "payload": {
+                  "type": "string",
+                  "value": "variantValue"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "child.with.non.matching.constraint",
+        "description": "Child with parent not matching constraint",
+        "enabled": true,
+        "dependencies": [{
+          "feature": "parent.with.constraint"
+        }],
+        "strategies": [
+          {
+            "name": "flexibleRollout",
+            "parameters": {
+              "rollout": "100",
+              "stickiness": "default",
+              "groupId": "parent"
+            },
+            "constraints": [
+              {
+                "contextName": "environment",
+                "operator": "IN",
+                "values": ["dev"]
+
+              }
+            ],
+            "variants": [
+              {
+                "name": "child.variant",
+                "weight": 1,
+                "payload": {
+                  "type": "string",
+                  "value": "variantValue"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "parent.with.cycle",
+        "description": "Parent with cycle to child",
+        "enabled": true,
+        "dependencies": [{
+          "feature": "child.with.cycle"
+        }],
+        "strategies": [
+          {
+            "name": "flexibleRollout",
+            "parameters": {
+              "rollout": "100",
+              "stickiness": "default",
+              "groupId": "parent"
+            },
+            "variants": [
+              {
+                "name": "parent.variant",
+                "weight": 1,
+                "payload": {
+                  "type": "string",
+                  "value": "variantValue"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "child.with.cycle",
+        "description": "Child with cycle to parent",
+        "enabled": true,
+        "dependencies": [{
+          "feature": "parent.with.cycle"
+        }],
+        "strategies": [
+          {
+            "name": "flexibleRollout",
+            "parameters": {
+              "rollout": "100",
+              "stickiness": "default",
+              "groupId": "parent"
+            },
+            "variants": [
+              {
+                "name": "parent.variant",
+                "weight": 1,
+                "payload": {
+                  "type": "string",
+                  "value": "variantValue"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "child.with.transitive.dependency",
+        "description": "Child with transitive dependency",
+        "enabled": true,
+        "dependencies": [{
+          "feature": "parent.enabled.child.enabled"
+        }],
+        "strategies": [
+          {
+            "name": "flexibleRollout",
+            "parameters": {
+              "rollout": "100",
+              "stickiness": "default",
+              "groupId": "parent"
+            },
+            "variants": [
+              {
+                "name": "parent.variant",
+                "weight": 1,
+                "payload": {
+                  "type": "string",
+                  "value": "variantValue"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "parent.explicitly.enabled.child.enabled",
+        "description": "Parent explicitly enabled, child enabled",
+        "enabled": true,
+        "dependencies": [{
+          "feature": "parent.enabled",
+          "enabled": true
+        }],
+        "strategies": [{
+          "name": "flexibleRollout",
+          "parameters": {
+            "rollout": "100",
+            "stickiness": "default",
+            "groupId": "groupId"
+          },
+          "variants": [
+            {
+              "name": "child.variant",
+              "weight": 1,
+              "payload": {
+                "type": "string",
+                "value": "variantValue"
+              }
+            }
+          ]
+        }]
+      },
+      {
+        "name": "parent.enabled.child.enabled",
+        "description": "Parent enabled, child enabled",
+        "enabled": true,
+        "dependencies": [{
+          "feature": "parent.enabled"
+        }],
+        "strategies": [{
+          "name": "flexibleRollout",
+          "parameters": {
+            "rollout": "100",
+            "stickiness": "default",
+            "groupId": "groupId"
+          },
+          "variants": [
+            {
+              "name": "child.variant",
+              "weight": 1,
+              "payload": {
+                "type": "string",
+                "value": "variantValue"
+              }
+            }
+          ]
+        }]
+      },
+      {
+        "name": "parent.enabled.child.disabled",
+        "description": "Parent enabled, child disabled",
+        "enabled": false,
+        "dependencies": [{
+          "feature": "parent.enabled"
+        }],
+        "strategies": [{
+          "name": "flexibleRollout",
+          "parameters": {
+            "rollout": "100",
+            "stickiness": "default",
+            "groupId": "groupId"
+          },
+          "variants": [
+            {
+              "name": "child.variant",
+              "weight": 1,
+              "payload": {
+                "type": "string",
+                "value": "variantValue"
+              }
+            }
+          ]
+        }]
+      },
+      {
+        "name": "parent.disabled.child.enabled",
+        "description": "Parent disabled, child enabled",
+        "enabled": true,
+        "dependencies": [{
+          "feature": "parent.disabled"
+        }],
+        "strategies": [{
+          "name": "flexibleRollout",
+          "parameters": {
+            "rollout": "100",
+            "stickiness": "default",
+            "groupId": "groupId"
+          },
+          "variants": [
+            {
+              "name": "child.variant",
+              "weight": 1,
+              "payload": {
+                "type": "string",
+                "value": "variantValue"
+              }
+            }
+          ]
+        }]
+      },
+      {
+        "name": "parent.disabled.child.disabled",
+        "description": "Parent disabled, child disabled",
+        "enabled": false,
+        "dependencies": [{
+          "feature": "parent.disabled"
+        }],
+        "strategies": [{
+          "name": "flexibleRollout",
+          "parameters": {
+            "rollout": "100",
+            "stickiness": "default",
+            "groupId": "groupId"
+          },
+          "variants": [
+            {
+              "name": "child.variant",
+              "weight": 1,
+              "payload": {
+                "type": "string",
+                "value": "variantValue"
+              }
+            }
+          ]
+        }]
+      },
+      {
+        "name": "parent.default.variant.child.enabled",
+        "description": "Parent enabled with no explicit variant, child enabled",
+        "enabled": true,
+        "dependencies": [{
+          "feature": "parent.enabled",
+          "variants": ["disabled"]
+        }],
+        "strategies": [{
+          "name": "flexibleRollout",
+          "parameters": {
+            "rollout": "100",
+            "stickiness": "default",
+            "groupId": "groupId"
+          },
+          "variants": [
+            {
+              "name": "child.variant",
+              "weight": 1,
+              "payload": {
+                "type": "string",
+                "value": "variantValue"
+              }
+            }
+          ]
+        }]
+      },
+      {
+        "name": "parent.disabled.satisfied.child.enabled",
+        "description": "Parent disabled expectation satisfied, child enabled",
+        "enabled": true,
+        "dependencies": [{
+          "feature": "parent.disabled",
+          "enabled": false
+        }],
+        "strategies": [{
+          "name": "flexibleRollout",
+          "parameters": {
+            "rollout": "100",
+            "stickiness": "default",
+            "groupId": "groupId"
+          },
+          "variants": [
+            {
+              "name": "child.variant",
+              "weight": 1,
+              "payload": {
+                "type": "string",
+                "value": "variantValue"
+              }
+            }
+          ]
+        }]
+      },
+      {
+        "name": "parent.disabled.not.satisfied.child.enabled",
+        "description": "Parent disabled expectation not satisfied, child enabled",
+        "enabled": true,
+        "dependencies": [{
+          "feature": "parent.enabled",
+          "enabled": false
+        }],
+        "strategies": [{
+          "name": "flexibleRollout",
+          "parameters": {
+            "rollout": "100",
+            "stickiness": "default",
+            "groupId": "groupId"
+          },
+          "variants": [
+            {
+              "name": "child.variant",
+              "weight": 1,
+              "payload": {
+                "type": "string",
+                "value": "variantValue"
+              }
+            }
+          ]
+        }]
+      },
+      {
+        "name": "parent.single.variant.child.enabled",
+        "description": "Parent single variant match, child enabled",
+        "enabled": true,
+        "dependencies": [{
+          "feature": "parent.with.variant",
+          "variants": ["parent.variant"]
+        }],
+        "strategies": [{
+          "name": "flexibleRollout",
+          "parameters": {
+            "rollout": "100",
+            "stickiness": "default",
+            "groupId": "groupId"
+          },
+          "variants": [
+            {
+              "name": "child.variant",
+              "weight": 1,
+              "payload": {
+                "type": "string",
+                "value": "variantValue"
+              }
+            }
+          ]
+        }]
+      },
+      {
+        "name": "parent.multiple.variants.child.enabled",
+        "description": "Parent multiples variants match, child enabled",
+        "enabled": true,
+        "dependencies": [{
+          "feature": "parent.with.variant",
+          "variants": ["parent.variant", "nonmatching.variant"]
+        }],
+        "strategies": [{
+          "name": "flexibleRollout",
+          "parameters": {
+            "rollout": "100",
+            "stickiness": "default",
+            "groupId": "groupId"
+          },
+          "variants": [
+            {
+              "name": "child.variant",
+              "weight": 1,
+              "payload": {
+                "type": "string",
+                "value": "variantValue"
+              }
+            }
+          ]
+        }]
+      },
+      {
+        "name": "parent.empty.variants.child.enabled",
+        "description": "Parent empty variants match, child enabled",
+        "enabled": true,
+        "dependencies": [{
+          "feature": "parent.with.variant",
+          "variants": []
+        }],
+        "strategies": [{
+          "name": "flexibleRollout",
+          "parameters": {
+            "rollout": "100",
+            "stickiness": "default",
+            "groupId": "groupId"
+          },
+          "variants": [
+            {
+              "name": "child.variant",
+              "weight": 1,
+              "payload": {
+                "type": "string",
+                "value": "variantValue"
+              }
+            }
+          ]
+        }]
+      },
+      {
+        "name": "parent.non.matching.variant.child.enabled",
+        "description": "Parent non matching variant, child enabled",
+        "enabled": true,
+        "dependencies": [{
+          "feature": "parent.with.variant",
+          "variants": ["nonmatching.variant"]
+        }],
+        "strategies": [{
+          "name": "flexibleRollout",
+          "parameters": {
+            "rollout": "100",
+            "stickiness": "default",
+            "groupId": "groupId"
+          },
+          "variants": [
+            {
+              "name": "child.variant",
+              "weight": 1,
+              "payload": {
+                "type": "string",
+                "value": "variantValue"
+              }
+            }
+          ]
+        }]
+      },
+      {
+        "name": "multiple.parents.satisfied.child.enabled",
+        "description": "Multiple parents satisfied, child enabled",
+        "enabled": true,
+        "dependencies": [{
+          "feature": "parent.enabled"
+        }, {
+          "feature": "parent.disabled",
+          "enabled": false
+        }],
+        "strategies": [{
+          "name": "flexibleRollout",
+          "parameters": {
+            "rollout": "100",
+            "stickiness": "default",
+            "groupId": "groupId"
+          },
+          "variants": [
+            {
+              "name": "child.variant",
+              "weight": 1,
+              "payload": {
+                "type": "string",
+                "value": "variantValue"
+              }
+            }
+          ]
+        }]
+      },
+      {
+        "name": "multiple.parents.not.satisfied.child.enabled",
+        "description": "Multiple parents not satisfied, child enabled",
+        "enabled": true,
+        "dependencies": [{
+          "feature": "parent.enabled"
+        }, {
+          "feature": "parent.disabled"
+        }],
+        "strategies": [{
+          "name": "flexibleRollout",
+          "parameters": {
+            "rollout": "100",
+            "stickiness": "default",
+            "groupId": "groupId"
+          },
+          "variants": [
+            {
+              "name": "child.variant",
+              "weight": 1,
+              "payload": {
+                "type": "string",
+                "value": "variantValue"
+              }
+            }
+          ]
+        }]
+      },
+      {
+        "name": "parents.not.exist.child.enabled",
+        "description": "Parent does not exist, child enabled",
+        "enabled": true,
+        "dependencies": [{
+          "feature": "parent.not.exist"
+        }],
+        "strategies": [{
+          "name": "flexibleRollout",
+          "parameters": {
+            "rollout": "100",
+            "stickiness": "default",
+            "groupId": "groupId"
+          },
+          "variants": [
+            {
+              "name": "child.variant",
+              "weight": 1,
+              "payload": {
+                "type": "string",
+                "value": "variantValue"
+              }
+            }
+          ]
+        }]
+      },
+      {
+        "name": "parent.disabled.child.expects.disabled.variant",
+        "description": "The parent is disabled. The child expects the parent's variant to be \"disabled\".",
+        "enabled": true,
+        "dependencies": [{
+          "feature": "parent.disabled",
+          "variants": ["disabled"]
+        }],
+        "strategies": [{
+          "name": "flexibleRollout",
+          "parameters": {
+            "rollout": "100",
+            "stickiness": "default",
+            "groupId": "groupId"
+          },
+          "variants": []
+        }]
+      }
+    ]
+  },
+  "tests": [
+    {
+      "description": "Both parent and child must be enabled for the child to be enabled.",
+      "context": {},
+      "toggleName": "parent.enabled.child.enabled",
+      "expectedResult": true
+    },
+    {
+      "description": "Both explicitly enabled parent and child must be enabled for the child to be enabled.",
+      "context": {},
+      "toggleName": "parent.explicitly.enabled.child.enabled",
+      "expectedResult": true
+    },
+    {
+      "description": "If parent is enabled but child is not, the child remains disabled.",
+      "context": {},
+      "toggleName": "parent.enabled.child.disabled",
+      "expectedResult": false
+    },
+    {
+      "description": "If parent is disabled, the child is also disabled, irrespective of its own state.",
+      "context": {},
+      "toggleName": "parent.disabled.child.enabled",
+      "expectedResult": false
+    },
+    {
+      "description": "Both parent and child being disabled results in the child being disabled.",
+      "context": {},
+      "toggleName": "parent.disabled.child.disabled",
+      "expectedResult": false
+    },
+    {
+      "description": "Child is enabled only if the parent is expectedly disabled and indeed is.",
+      "context": {},
+      "toggleName": "parent.disabled.satisfied.child.enabled",
+      "expectedResult": true
+    },
+    {
+      "description": "Child is disabled if the parent is expected to be disabled but is actually enabled.",
+      "context": {},
+      "toggleName": "parent.disabled.not.satisfied.child.enabled",
+      "expectedResult": false
+    },
+    {
+      "description": "Child is enabled if its parent matches a specific variant.",
+      "context": {},
+      "toggleName": "parent.single.variant.child.enabled",
+      "expectedResult": true
+    },
+    {
+      "description": "Child is enabled if its parent matches any of the specified variants.",
+      "context": {},
+      "toggleName": "parent.multiple.variants.child.enabled",
+      "expectedResult": true
+    },
+    {
+      "description": "Child is enabled if the parent is enabled, regardless of empty variant dependencies.",
+      "context": {},
+      "toggleName": "parent.empty.variants.child.enabled",
+      "expectedResult": true
+    },
+    {
+      "description": "Child is disabled if the parent's variant does not match the specified one.",
+      "context": {},
+      "toggleName": "parent.non.matching.variant.child.enabled",
+      "expectedResult": false
+    },
+    {
+      "description": "Child is enabled if all of its multiple parents are enabled.",
+      "context": {},
+      "toggleName": "multiple.parents.satisfied.child.enabled",
+      "expectedResult": true
+    },
+    {
+      "description": "Child is disabled if any one of its multiple parents is disabled.",
+      "context": {},
+      "toggleName": "multiple.parents.not.satisfied.child.enabled",
+      "expectedResult": false
+    },
+    {
+      "description": "Child is disabled if the specified parent does not exist.",
+      "context": {},
+      "toggleName": "parents.not.exist.child.enabled",
+      "expectedResult": false
+    },
+    {
+      "description": "Child is disabled if there's a cyclic dependency with the parent.",
+      "context": {},
+      "toggleName": "child.with.cycle",
+      "expectedResult": false
+    },
+    {
+      "description": "Child is disabled if a transitive dependency exists.",
+      "context": {},
+      "toggleName": "child.with.transitive.dependency",
+      "expectedResult": false
+    },
+    {
+      "description": "Child is enabled if its parent is enabled with child context.",
+      "context": {
+        "environment": "prod"
+      },
+      "toggleName": "child.with.matching.constraint",
+      "expectedResult": true
+    },
+    {
+      "description": "Child is disabled if its parent is disabled with child context.",
+      "context": {
+        "environment": "dev"
+      },
+      "toggleName": "child.with.non.matching.constraint",
+      "expectedResult": false
+    },
+    {
+      "description": "Child is enabled if its parent's default variant is satisfied.",
+      "context": {},
+      "toggleName": "parent.default.variant.child.enabled",
+      "expectedResult": true
+    },
+    {
+      "description": "Child is disabled if the parent is disabled, even if the child's expected variant is the disabled variant",
+      "context": {},
+      "toggleName": "parent.disabled.child.expects.disabled.variant",
+      "expectedResult": false
+    }
+  ],
+  "variantTests": [
+    {
+      "description": "Child yields its variant when both parent and child are enabled.",
+      "context": {},
+      "toggleName": "parent.enabled.child.enabled",
+      "expectedResult": {
+        "name": "child.variant",
+        "payload": {
+          "type": "string",
+          "value": "variantValue"
+        },
+        "enabled": true,
+        "feature_enabled": true
+      }
+    },
+    {
+      "description": "Child yields its variant when both explicitly enabled parent and child are enabled.",
+      "context": {},
+      "toggleName": "parent.explicitly.enabled.child.enabled",
+      "expectedResult": {
+        "name": "child.variant",
+        "payload": {
+          "type": "string",
+          "value": "variantValue"
+        },
+        "enabled": true,
+        "feature_enabled": true
+      }
+    },
+    {
+      "description": "Child yields a disabled variant when the parent is enabled, but the child is not.",
+      "context": {},
+      "toggleName": "parent.enabled.child.disabled",
+      "expectedResult": {
+        "name": "disabled",
+        "enabled": false,
+        "feature_enabled": false
+      }
+    },
+    {
+      "description": "Child yields a disabled variant when the parent is disabled, even if the child is enabled.",
+      "context": {},
+      "toggleName": "parent.disabled.child.enabled",
+      "expectedResult": {
+        "name": "disabled",
+        "enabled": false,
+        "feature_enabled": false
+      }
+    },
+    {
+      "description": "Child yields a disabled variant when both the parent and child are disabled.",
+      "context": {},
+      "toggleName": "parent.disabled.child.disabled",
+      "expectedResult": {
+        "name": "disabled",
+        "enabled": false,
+        "feature_enabled": false
+      }
+    },
+    {
+      "description": "Child yields its variant when the parent's disabled state is as expected.",
+      "context": {},
+      "toggleName": "parent.disabled.satisfied.child.enabled",
+      "expectedResult": {
+        "name": "child.variant",
+        "payload": {
+          "type": "string",
+          "value": "variantValue"
+        },
+        "enabled": true,
+        "feature_enabled": true
+      }
+    },
+    {
+      "description": "Child yields a disabled variant when the parent's disabled state is not as expected.",
+      "context": {},
+      "toggleName": "parent.disabled.not.satisfied.child.enabled",
+      "expectedResult": {
+        "name": "disabled",
+        "enabled": false,
+        "feature_enabled": false
+      }
+    },
+    {
+      "description": "Child yields its variant when the parent matches a specific variant.",
+      "context": {},
+      "toggleName": "parent.single.variant.child.enabled",
+      "expectedResult": {
+        "name": "child.variant",
+        "payload": {
+          "type": "string",
+          "value": "variantValue"
+        },
+        "enabled": true,
+        "feature_enabled": true
+      }
+    },
+    {
+      "description": "Child yields its variant when the parent matches any given variant.",
+      "context": {},
+      "toggleName": "parent.multiple.variants.child.enabled",
+      "expectedResult": {
+        "name": "child.variant",
+        "payload": {
+          "type": "string",
+          "value": "variantValue"
+        },
+        "enabled": true,
+        "feature_enabled": true
+      }
+    },
+    {
+      "description": "Child yields its variant when the parent is enabled, even with empty variant dependencies.",
+      "context": {},
+      "toggleName": "parent.empty.variants.child.enabled",
+      "expectedResult": {
+        "name": "child.variant",
+        "payload": {
+          "type": "string",
+          "value": "variantValue"
+        },
+        "enabled": true,
+        "feature_enabled": true
+      }
+    },
+    {
+      "description": "Child yields a disabled variant if the parent's variant doesn't match the required one.",
+      "context": {},
+      "toggleName": "parent.non.matching.variant.child.enabled",
+      "expectedResult": {
+        "name": "disabled",
+        "enabled": false,
+        "feature_enabled": false
+      }
+    },
+    {
+      "description": "Child yields its variant when all its parents are enabled.",
+      "context": {},
+      "toggleName": "multiple.parents.satisfied.child.enabled",
+      "expectedResult": {
+        "name": "child.variant",
+        "payload": {
+          "type": "string",
+          "value": "variantValue"
+        },
+        "enabled": true,
+        "feature_enabled": true
+      }
+    },
+    {
+      "description": "Child yields a disabled variant if any of its parents is disabled.",
+      "context": {},
+      "toggleName": "multiple.parents.not.satisfied.child.enabled",
+      "expectedResult": {
+        "name": "disabled",
+        "enabled": false,
+        "feature_enabled": false
+      }
+    },
+    {
+      "description": "Child yields a disabled variant in the absence of a specified parent.",
+      "context": {},
+      "toggleName": "parents.not.exist.child.enabled",
+      "expectedResult": {
+        "name": "disabled",
+        "enabled": false,
+        "feature_enabled": false
+      }
+    },
+    {
+      "description": "Child yields a disabled variant due to a cyclic dependency with the parent.",
+      "context": {},
+      "toggleName": "child.with.cycle",
+      "expectedResult": {
+        "name": "disabled",
+        "enabled": false,
+        "feature_enabled": false
+      }
+    },
+    {
+      "description": "Child yields a disabled variant because of a transitive dependency.",
+      "context": {},
+      "toggleName": "child.with.transitive.dependency",
+      "expectedResult": {
+        "name": "disabled",
+        "enabled": false,
+        "feature_enabled": false
+      }
+    },
+    {
+      "description": "Child yields its variant when parent is enabled with child context.",
+      "context": {
+        "environment": "prod"
+      },
+      "toggleName": "child.with.matching.constraint",
+      "expectedResult": {
+        "name": "child.variant",
+        "payload": {
+          "type": "string",
+          "value": "variantValue"
+        },
+        "enabled": true,
+        "feature_enabled": true
+      }
+    },
+    {
+      "description": "Child yields a disabled variant when parent is disabled with child context.",
+      "context": {
+        "environment": "dev"
+      },
+      "toggleName": "child.with.non.matching.constraint",
+      "expectedResult": {
+        "name": "disabled",
+        "enabled": false,
+        "feature_enabled": false
+      }
+    },
+    {
+      "description": "Child yields its variant when the parent's default variant is met.",
+      "context": {},
+      "toggleName": "parent.default.variant.child.enabled",
+      "expectedResult": {
+        "name": "child.variant",
+        "payload": {
+          "type": "string",
+          "value": "variantValue"
+        },
+        "enabled": true,
+        "feature_enabled": true
+      }
+    }
+  ]
+}
