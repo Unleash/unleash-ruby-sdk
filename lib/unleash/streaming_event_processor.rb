@@ -40,10 +40,10 @@ module Unleash
     end
 
     def handle_updated_event(event)
-      # Save the updated state to backup file first, even if engine update fails
-      Unleash::BackupFileWriter.save!(event.data)
-
       handle_delta_event(event.data)
+
+      full_state = @toggle_engine.get_state
+      Unleash::BackupFileWriter.save!(full_state)
     rescue JSON::ParserError => e
       Unleash.logger.error "Unable to parse JSON from streaming event data. Exception thrown #{e.class}: '#{e}'"
       Unleash.logger.debug "stacktrace: #{e.backtrace}"
