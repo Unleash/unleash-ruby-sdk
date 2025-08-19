@@ -1,5 +1,6 @@
 require 'unleash/configuration'
 require 'unleash/bootstrap/handler'
+require 'unleash/backup_file_writer'
 require 'net/http'
 require 'json'
 require 'yggdrasil_engine'
@@ -54,25 +55,7 @@ module Unleash
       # always synchronize with the local cache when fetching:
       update_engine_state!(response.body)
 
-      save! response.body
-    end
-
-    def save!(toggle_data)
-      Unleash.logger.debug "Will save toggles to disk now"
-
-      backup_file = Unleash.configuration.backup_file
-      backup_file_tmp = "#{backup_file}.tmp"
-
-      self.toggle_lock.synchronize do
-        File.open(backup_file_tmp, "w") do |file|
-          file.write(toggle_data)
-        end
-        File.rename(backup_file_tmp, backup_file)
-      end
-    rescue StandardError => e
-      # This is not really the end of the world. Swallowing the exception.
-      Unleash.logger.error "Unable to save backup file. Exception thrown #{e.class}:'#{e}'"
-      Unleash.logger.error "stacktrace: #{e.backtrace}"
+      Unleash::BackupFileWriter.save! response.body
     end
 
     private
