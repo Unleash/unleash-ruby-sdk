@@ -15,5 +15,3 @@
 .rspec_status
 Gemfile.lock
 
-# Clone of the client-specification
-/client-specification/
