@@ -17,7 +17,7 @@ RSpec.describe Unleash::StreamingEventProcessor do
 
   class TestEvent
     attr_reader :type, :data
-    
+
     def initialize(type, data)
       @type = type
       @data = data
@@ -32,7 +32,7 @@ RSpec.describe Unleash::StreamingEventProcessor do
         "feature": {
           "name": name,
           "enabled": enabled,
-          "strategies": [{"name": "default"}]
+          "strategies": [{ "name": "default" }]
         }
       }]
     }.to_json
@@ -40,26 +40,25 @@ RSpec.describe Unleash::StreamingEventProcessor do
 
   def backup_contains_feature?(name)
     return false unless File.exist?(backup_file)
+
     parsed = JSON.parse(File.read(backup_file))
     feature_names = parsed['features'].map { |f| f['name'] }
     feature_names.include?(name)
   end
 
   describe '#process_event' do
-
     it 'processes valid events and saves full engine state' do
       event = TestEvent.new('unleash-updated', feature_event('test-feature'))
       processor.process_event(event)
-      
+
       expect(engine.enabled?('test-feature', {})).to eq(true)
       expect(backup_contains_feature?('test-feature')).to eq(true)
     end
 
-
     it 'ignores unknown event types' do
       event = TestEvent.new('unknown-event', feature_event('test-feature'))
       processor.process_event(event)
-      
+
       expect(File.exist?(backup_file)).to eq(false)
       expect(engine.enabled?('test-feature', {})).to be_falsy
     end
@@ -74,7 +73,7 @@ RSpec.describe Unleash::StreamingEventProcessor do
 
     it 'handles invalid JSON gracefully without creating backup' do
       event = TestEvent.new('unleash-updated', 'invalid json')
-      
+
       expect { processor.process_event(event) }.not_to raise_error
       expect(File.exist?(backup_file)).to eq(false)
     end
