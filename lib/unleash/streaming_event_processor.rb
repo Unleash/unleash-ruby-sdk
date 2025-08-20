@@ -1,4 +1,5 @@
 require 'json'
+require 'unleash/backup_file_writer'
 
 module Unleash
   class StreamingEventProcessor
@@ -41,7 +42,8 @@ module Unleash
     def handle_updated_event(event)
       handle_delta_event(event.data)
 
-      # TODO: update backup file
+      full_state = @toggle_engine.get_state
+      Unleash::BackupFileWriter.save!(full_state)
     rescue JSON::ParserError => e
       Unleash.logger.error "Unable to parse JSON from streaming event data. Exception thrown #{e.class}: '#{e}'"
       Unleash.logger.debug "stacktrace: #{e.backtrace}"
