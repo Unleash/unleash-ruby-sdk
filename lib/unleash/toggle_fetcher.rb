@@ -1,6 +1,7 @@
 require 'unleash/configuration'
 require 'unleash/bootstrap/handler'
 require 'unleash/backup_file_writer'
+require 'unleash/backup_file_reader'
 require 'net/http'
 require 'json'
 require 'yggdrasil_engine'
@@ -27,7 +28,7 @@ module Unleash
         # fail back to reading the backup file
         Unleash.logger.warn "ToggleFetcher was unable to fetch from the network, attempting to read from backup file."
         Unleash.logger.debug "Exception Caught: #{e}"
-        read!
+        read_backup_file!
       end
 
       # once initialized, somewhere else you will want to start a loop with fetch()
@@ -71,25 +72,9 @@ module Unleash
       Unleash.logger.error "Failed to hydrate state: #{e.backtrace}"
     end
 
-    def read!
-      Unleash.logger.debug "read!()"
-      backup_file = Unleash.configuration.backup_file
-      return nil unless File.exist?(backup_file)
-
-      backup_data = File.read(backup_file)
-      update_engine_state!(backup_data)
-    rescue IOError => e
-      # :nocov:
-      Unleash.logger.error "Unable to read the backup_file: #{e}"
-      # :nocov:
-    rescue JSON::ParserError => e
-      # :nocov:
-      Unleash.logger.error "Unable to parse JSON from existing backup_file: #{e}"
-      # :nocov:
-    rescue StandardError => e
-      # :nocov:
-      Unleash.logger.error "Unable to extract valid data from backup_file. Exception thrown: #{e}"
-      # :nocov:
+    def read_backup_file!
+      backup_data = Unleash::BackupFileReader.read!
+      update_engine_state!(backup_data) if backup_data
     end
 
     def bootstrap
