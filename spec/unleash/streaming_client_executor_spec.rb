@@ -1,4 +1,6 @@
 RSpec.describe Unleash::StreamingClientExecutor do
+  subject(:streaming_executor) { Unleash::StreamingClientExecutor.new(executor_name, engine) }
+
   unless RUBY_ENGINE == 'jruby'
     before do
       Unleash.configure do |config|
@@ -39,14 +41,12 @@ RSpec.describe Unleash::StreamingClientExecutor do
                 description: "Feature from backup",
                 enabled: true,
                 strategies: [{
-                  "name": "default"
+                  name: "default"
                 }]
               }
             ]
           }
         end
-
-        let(:streaming_executor) { described_class.new(executor_name, engine) }
 
         before do
           backup_file = Unleash.configuration.backup_file
@@ -56,7 +56,6 @@ RSpec.describe Unleash::StreamingClientExecutor do
             file.write(backup_toggles.to_json)
           end
 
-          # Simulate streaming connection failure
           WebMock.stub_request(:get, "http://streaming-test-url/client/streaming")
             .to_return(status: 500, body: "Internal Server Error", headers: {})
 
@@ -89,12 +88,9 @@ RSpec.describe Unleash::StreamingClientExecutor do
           })
         end
 
-        let(:streaming_executor) { described_class.new(executor_name, engine) }
-
         before do
           Unleash.configuration.bootstrap_config = bootstrap_config
 
-          # Streaming connection might succeed or fail, doesn't matter for bootstrap
           WebMock.stub_request(:get, "http://streaming-test-url/client/streaming")
             .to_return(status: 200, body: "", headers: {})
 
@@ -135,8 +131,6 @@ RSpec.describe Unleash::StreamingClientExecutor do
           }
         end
 
-        let(:streaming_executor) { described_class.new(executor_name, engine) }
-
         before do
           backup_file = Unleash.configuration.backup_file
 
@@ -146,7 +140,6 @@ RSpec.describe Unleash::StreamingClientExecutor do
 
           Unleash.configuration.bootstrap_config = invalid_bootstrap_config
 
-          # Streaming connection failure doesn't matter here
           WebMock.stub_request(:get, "http://streaming-test-url/client/streaming")
             .to_return(status: 500, body: "", headers: {})
 
