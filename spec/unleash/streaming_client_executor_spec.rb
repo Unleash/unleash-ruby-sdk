@@ -18,7 +18,7 @@ RSpec.describe Unleash::StreamingClientExecutor do
     after do
       WebMock.reset!
       File.delete(Unleash.configuration.backup_file) if File.exist?(Unleash.configuration.backup_file)
-      
+
       # Reset configuration to prevent interference with other tests
       Unleash.configuration.bootstrap_config = nil
       Unleash.configuration.experimental_mode = nil
