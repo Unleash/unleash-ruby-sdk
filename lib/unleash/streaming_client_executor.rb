@@ -21,7 +21,7 @@ module Unleash
           read_backup_file!(engine)
         end
       rescue StandardError => e
-        # fail back to reading the backup file
+        # fall back to reading the backup file
         Unleash.logger.warn "StreamingClientExecutor was unable to initialize, attempting to read from backup file."
         Unleash.logger.debug "Exception Caught: #{e}"
         read_backup_file!(engine)

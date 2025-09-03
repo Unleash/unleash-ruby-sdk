@@ -1,5 +1,4 @@
 require 'unleash/configuration'
-require 'json'
 
 module Unleash
   class BackupFileReader
@@ -13,11 +12,6 @@ module Unleash
     rescue IOError => e
       # :nocov:
       Unleash.logger.error "Unable to read the backup_file: #{e}"
-      # :nocov:
-      nil
-    rescue JSON::ParserError => e
-      # :nocov:
-      Unleash.logger.error "Unable to parse JSON from existing backup_file: #{e}"
       # :nocov:
       nil
     rescue StandardError => e

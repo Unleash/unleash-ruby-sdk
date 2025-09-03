@@ -25,7 +25,7 @@ module Unleash
           fetch
         end
       rescue StandardError => e
-        # fail back to reading the backup file
+        # fall back to reading the backup file
         Unleash.logger.warn "ToggleFetcher was unable to fetch from the network, attempting to read from backup file."
         Unleash.logger.debug "Exception Caught: #{e}"
         read_backup_file!
