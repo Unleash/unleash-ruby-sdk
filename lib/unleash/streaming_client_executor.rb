@@ -1,4 +1,6 @@
 require 'unleash/streaming_event_processor'
+require 'unleash/bootstrap/handler'
+require 'unleash/backup_file_reader'
 require 'unleash/util/event_source_wrapper'
 
 module Unleash
@@ -10,6 +12,20 @@ module Unleash
       self.event_source = nil
       self.event_processor = Unleash::StreamingEventProcessor.new(engine)
       self.running = false
+
+      begin
+        # if bootstrap configuration is available, initialize. Otherwise read backup file
+        if Unleash.configuration.use_bootstrap?
+          bootstrap(engine)
+        else
+          read_backup_file!(engine)
+        end
+      rescue StandardError => e
+        # fall back to reading the backup file
+        Unleash.logger.warn "StreamingClientExecutor was unable to initialize, attempting to read from backup file."
+        Unleash.logger.debug "Exception Caught: #{e}"
+        read_backup_file!(engine)
+      end
     end
 
     def run(&_block)
@@ -80,6 +96,19 @@ module Unleash
     rescue StandardError => e
       Unleash.logger.error "Streaming client #{self.name} threw exception #{e.class}: '#{e}'"
       Unleash.logger.debug "stacktrace: #{e.backtrace}"
+    end
+
+    def read_backup_file!(engine)
+      backup_data = Unleash::BackupFileReader.read!
+      engine.take_state(backup_data) if backup_data
+    end
+
+    def bootstrap(engine)
+      bootstrap_payload = Unleash::Bootstrap::Handler.new(Unleash.configuration.bootstrap_config).retrieve_toggles
+      engine.take_state(bootstrap_payload)
+
+      # reset Unleash.configuration.bootstrap_data to free up memory, as we will never use it again
+      Unleash.configuration.bootstrap_config = nil
     end
   end
 end
