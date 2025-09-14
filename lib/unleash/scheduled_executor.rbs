@@ -1,0 +1,29 @@
+module Unleash
+  class ScheduledExecutor
+    attr_accessor name: String
+
+    attr_accessor interval: Numeric
+
+    attr_accessor max_exceptions: ::Integer
+
+    attr_accessor retry_count: ::Integer
+
+    attr_accessor thread: (Thread | nil)
+
+    attr_accessor immediate_execution: bool
+
+    def initialize: (String name, untyped interval, ?::Integer max_exceptions, ?bool immediate_execution) -> void
+
+    def run: () ?{ () -> nil } -> nil
+
+    def running?: () -> bool
+
+    def exit: () -> nil
+
+    private
+
+    def run_blk: () { () -> nil } -> nil
+
+    def exceeded_max_exceptions?: () -> bool
+  end
+end
