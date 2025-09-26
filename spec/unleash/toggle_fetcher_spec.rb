@@ -65,6 +65,30 @@ RSpec.describe Unleash::ToggleFetcher do
         backup_file = Unleash.configuration.backup_file
         expect(File.exist?(backup_file)).to eq(true)
       end
+
+      # NOTE: this is a frequent issue with Puma (in clustered mode). See Unleash/unleash-ruby-sdk#108
+      it 'does not log errors due to concurrent forked processes' do
+        skip 'Fork not supported on current platform' unless Process.respond_to?(:fork)
+
+        log_file = ->(pid) { File.join(Dir.tmpdir, "#{pid}.log") }
+        pids = Array.new(10) do
+          fork do
+            Unleash.logger = Logger.new(log_file.call(Process.pid))
+            expect(Unleash.logger).not_to receive(:error)
+            described_class.new engine
+          end
+        end
+
+        pids.each do |pid|
+          Process.wait(pid)
+          process_status = $? # rubocop:disable Style/SpecialGlobalVars
+          error_log_file = log_file.call(pid)
+          expect(File.exist?(error_log_file))
+
+          error_msg = "Process #{pid} failed with errors:\n#{File.read(error_log_file).lines[1..].join}"
+          expect(process_status).to be_success, error_msg
+        end
+      end
     end
   end
 

@@ -6,7 +6,7 @@ module Unleash
       Unleash.logger.debug "Will save toggles to disk now"
 
       backup_file = Unleash.configuration.backup_file
-      backup_file_tmp = "#{backup_file}.tmp"
+      backup_file_tmp = "#{backup_file}.tmp-#{Process.pid}"
 
       File.open(backup_file_tmp, "w") do |file|
         file.write(toggle_data)
