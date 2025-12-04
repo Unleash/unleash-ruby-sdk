@@ -13,6 +13,11 @@ Note: These changes are not considered notable:
 
 ## [Unreleased]
 
+## [6.4.1] - 2025-12-04
+
+### Changed
+- Bump yggdrasil-engine
+
 ## [6.4.0] - 2025-08-12
 ### Added
 - Experimental streaming support
