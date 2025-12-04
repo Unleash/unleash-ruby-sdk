@@ -13,6 +13,11 @@ Note: These changes are not considered notable:
 
 ## [Unreleased]
 
+## [6.4.1] - 2025-12-04
+
+### Changed
+- Bump yggdrasil-engine that comes with [yggdrasil FFI 1.18.2](https://github.com/Unleash/yggdrasil-bindings/releases/tag/yggdrasilffi-v0.18.2)
+
 ## [6.4.0] - 2025-08-12
 ### Added
 - Experimental streaming support
