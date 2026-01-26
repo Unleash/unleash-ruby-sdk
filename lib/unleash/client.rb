@@ -198,9 +198,7 @@ module Unleash
     end
 
     def resolve_impact_metrics_environment
-      headers = Unleash.configuration.custom_http_headers
-      headers = headers.call if headers.respond_to?(:call)
-      EnvironmentResolver.extract_environment_from_custom_headers(headers) ||
+      EnvironmentResolver.extract_environment_from_custom_headers(Unleash.configuration.generate_custom_http_headers) ||
         Unleash.configuration.environment
     end
   end
