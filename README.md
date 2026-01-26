@@ -584,23 +584,6 @@ client.impact_metrics.define_histogram(
 client.impact_metrics.observe_histogram('request_time_ms', 125)
 ```
 
-### Associating metrics with feature flags
-
-You can associate metrics with feature flags using `MetricFlagContext`. This adds feature flag variant labels to your metrics, allowing you to correlate application behavior with specific flag states:
-
-```ruby
-flag_context = Unleash::MetricFlagContext.new(
-  flag_names: ['new-checkout-flow', 'premium-features'],
-  context: { 'userId' => 'user-123' }
-)
-
-client.impact_metrics.increment_counter('purchases', 1, flag_context)
-client.impact_metrics.update_gauge('active_users', 42, flag_context)
-client.impact_metrics.observe_histogram('latency', 0.25, flag_context)
-```
-
-Impact metrics are batched and sent using the same interval as standard SDK metrics.
-
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies.
