@@ -23,7 +23,8 @@ module Unleash
     def post
       Unleash.logger.debug "post() Report"
 
-      report = build_report
+      impact_metrics = collect_impact_metrics_safely
+      report = build_report(impact_metrics)
       return unless report
 
       send_report(report)
@@ -44,15 +45,20 @@ module Unleash
       }
     end
 
-    def build_report
+    def build_report(impact_metrics)
       report = generate_report
-      return nil if report.nil? && Time.now - self.last_time < LONGEST_WITHOUT_A_REPORT
+      has_data = !report.nil? || !impact_metrics.empty?
 
-      report || generate_report_from_bucket({
+      return nil if !has_data && Time.now - self.last_time < LONGEST_WITHOUT_A_REPORT
+
+      report ||= generate_report_from_bucket({
         'start': self.last_time.utc.iso8601,
         'stop': Time.now.utc.iso8601,
         'toggles': {}
       })
+
+      report[:impactMetrics] = impact_metrics unless impact_metrics.empty?
+      report
     end
 
     def send_report(report)
@@ -66,8 +72,24 @@ module Unleash
       else
         # :nocov:
         Unleash.logger.error "Error when sending report to unleash server. Server responded with http code #{response.code}."
+        restore_impact_metrics(report[:impactMetrics])
         # :nocov:
       end
+    end
+
+    def restore_impact_metrics(impact_metrics)
+      return if impact_metrics.nil? || impact_metrics.empty?
+
+      Unleash.engine&.restore_impact_metrics(impact_metrics)
+    rescue StandardError => e
+      Unleash.logger.warn "Failed to restore impact metrics: #{e.message}"
+    end
+
+    def collect_impact_metrics_safely
+      Unleash.engine&.collect_impact_metrics || []
+    rescue StandardError => e
+      Unleash.logger.warn "Failed to collect impact metrics: #{e.message}"
+      []
     end
   end
 end

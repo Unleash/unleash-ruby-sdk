@@ -534,6 +534,73 @@ Unleash.configure do |config|
 end
 ```
 
+## Impact metrics
+
+Impact metrics are lightweight, application-level time-series metrics stored and visualized directly inside Unleash. They allow you to connect specific application data, such as request counts, error rates, or latency, to your feature flags and release plans.
+
+These metrics help validate feature impact and automate release processes. For instance, you can monitor usage patterns or performance to determine if a feature meets its goals.
+
+The SDK automatically attaches context labels to metrics: `appName` and `environment`.
+
+### Counters
+
+Use counters for cumulative values that only increase (total requests, errors):
+
+```ruby
+client = Unleash::Client.new
+
+client.impact_metrics.define_counter(
+  'request_count',
+  'Total number of HTTP requests processed'
+)
+
+client.impact_metrics.increment_counter('request_count')
+```
+
+### Gauges
+
+Use gauges for point-in-time values that can go up or down:
+
+```ruby
+client.impact_metrics.define_gauge(
+  'total_users',
+  'Total number of registered users'
+)
+
+client.impact_metrics.update_gauge('total_users', user_count)
+```
+
+### Histograms
+
+Histograms measure value distribution (request duration, response size):
+
+```ruby
+client.impact_metrics.define_histogram(
+  'request_time_ms',
+  'Time taken to process a request in milliseconds',
+  [50, 100, 200, 500, 1000]
+)
+
+client.impact_metrics.observe_histogram('request_time_ms', 125)
+```
+
+### Associating metrics with feature flags
+
+You can associate metrics with feature flags using `MetricFlagContext`. This adds feature flag variant labels to your metrics, allowing you to correlate application behavior with specific flag states:
+
+```ruby
+flag_context = Unleash::MetricFlagContext.new(
+  flag_names: ['new-checkout-flow', 'premium-features'],
+  context: { 'userId' => 'user-123' }
+)
+
+client.impact_metrics.increment_counter('purchases', 1, flag_context)
+client.impact_metrics.update_gauge('active_users', 42, flag_context)
+client.impact_metrics.observe_histogram('latency', 0.25, flag_context)
+```
+
+Impact metrics are batched and sent using the same interval as standard SDK metrics.
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies.
