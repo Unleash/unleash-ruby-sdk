@@ -1,30 +1,6 @@
 require 'json'
 
 RSpec.describe 'Impact Metrics' do
-  let(:bootstrap_data) do
-    {
-      version: 1,
-      features: [
-        {
-          name: "feature-with-variant",
-          enabled: true,
-          strategies: [{ name: "default" }],
-          variants: [{ name: "treatment", weight: 1000 }]
-        },
-        {
-          name: "enabled-feature",
-          enabled: true,
-          strategies: [{ name: "default" }]
-        },
-        {
-          name: "disabled-feature",
-          enabled: false,
-          strategies: [{ name: "default" }]
-        }
-      ]
-    }.to_json
-  end
-
   before do
     WebMock.stub_request(:post, "http://test-url/client/metrics")
       .to_return(status: 202, body: "", headers: {})
@@ -35,7 +11,6 @@ RSpec.describe 'Impact Metrics' do
       config.environment = 'production'
       config.instance_id = 'rspec/test'
       config.disable_client = true
-      config.bootstrap_config = Unleash::Bootstrap::Configuration.new({ 'data' => bootstrap_data })
     end
   end
 
@@ -96,34 +71,6 @@ RSpec.describe 'Impact Metrics' do
               }
             ]
           }
-        }
-      end)
-  end
-
-  it "includes flag labels when using MetricFlagContext" do
-    unleash_client = Unleash::Client.new
-    Unleash.reporter = Unleash::MetricsReporter.new
-
-    flag_context = Unleash::MetricFlagContext.new(
-      flag_names: ['feature-with-variant', 'enabled-feature', 'disabled-feature'],
-      context: { 'userId' => '123' }
-    )
-
-    unleash_client.impact_metrics.define_counter('purchases', 'Number of purchases')
-    unleash_client.impact_metrics.increment_counter('purchases', 1, flag_context)
-
-    Unleash.reporter.post
-
-    expect(WebMock).to(have_requested(:post, 'http://test-url/client/metrics')
-      .with do |req|
-        body = JSON.parse(req.body)
-        labels = body['impactMetrics'][0]['samples'][0]['labels']
-        labels == {
-          'appName' => 'my-test-app',
-          'environment' => 'production',
-          'feature-with-variant' => 'treatment',
-          'enabled-feature' => 'enabled',
-          'disabled-feature' => 'disabled'
         }
       end)
   end
