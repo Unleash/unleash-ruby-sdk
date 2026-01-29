@@ -26,8 +26,7 @@ module Unleash
       Unleash.engine = YggdrasilEngine.new
       Unleash.engine.register_custom_strategies(Unleash.configuration.strategies.custom_strategies)
 
-      environment = resolve_impact_metrics_environment
-      @impact_metrics = ImpactMetrics.new(Unleash.engine, Unleash.configuration.app_name, environment)
+      @impact_metrics = ImpactMetrics.new(Unleash.engine, Unleash.configuration.app_name)
 
       Unleash.toggle_fetcher = Unleash::ToggleFetcher.new Unleash.engine unless Unleash.configuration.streaming_mode?
 
@@ -195,11 +194,6 @@ module Unleash
       else
         start_toggle_fetcher
       end
-    end
-
-    def resolve_impact_metrics_environment
-      EnvironmentResolver.extract_environment_from_custom_headers(Unleash.configuration.generate_custom_http_headers) ||
-        Unleash.configuration.environment
     end
   end
 end
