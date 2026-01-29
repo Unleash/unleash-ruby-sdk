@@ -6,12 +6,15 @@ require 'unleash/streaming_client_executor'
 require 'unleash/variant'
 require 'unleash/util/http'
 require 'unleash/util/event_source_wrapper'
+require 'unleash/environment_resolver'
+require 'unleash/impact_metrics'
 require 'logger'
 require 'time'
 
 module Unleash
   class Client
     attr_accessor :fetcher_scheduled_executor, :metrics_scheduled_executor
+    attr_reader :impact_metrics
 
     # rubocop:disable Metrics/AbcSize
     def initialize(*opts)
@@ -22,6 +25,8 @@ module Unleash
       Unleash.logger.level = Unleash.configuration.log_level
       Unleash.engine = YggdrasilEngine.new
       Unleash.engine.register_custom_strategies(Unleash.configuration.strategies.custom_strategies)
+
+      @impact_metrics = ImpactMetrics.new(Unleash.engine, Unleash.configuration.app_name)
 
       Unleash.toggle_fetcher = Unleash::ToggleFetcher.new Unleash.engine unless Unleash.configuration.streaming_mode?
 

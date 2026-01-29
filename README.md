@@ -534,6 +534,56 @@ Unleash.configure do |config|
 end
 ```
 
+## Impact metrics
+
+Impact metrics are lightweight, application-level time-series metrics stored and visualized directly inside Unleash. They allow you to connect specific application data, such as request counts, error rates, or latency, to your feature flags and release plans.
+
+These metrics help validate feature impact and automate release processes. For instance, you can monitor usage patterns or performance to determine if a feature meets its goals.
+
+The SDK automatically attaches context labels to metrics: `appName` and `environment`.
+
+### Counters
+
+Use counters for cumulative values that only increase (total requests, errors):
+
+```ruby
+client = Unleash::Client.new
+
+client.impact_metrics.define_counter(
+  'request_count',
+  'Total number of HTTP requests processed'
+)
+
+client.impact_metrics.increment_counter('request_count')
+```
+
+### Gauges
+
+Use gauges for point-in-time values that can go up or down:
+
+```ruby
+client.impact_metrics.define_gauge(
+  'total_users',
+  'Total number of registered users'
+)
+
+client.impact_metrics.update_gauge('total_users', user_count)
+```
+
+### Histograms
+
+Histograms measure value distribution (request duration, response size):
+
+```ruby
+client.impact_metrics.define_histogram(
+  'request_time_ms',
+  'Time taken to process a request in milliseconds',
+  [50, 100, 200, 500, 1000]
+)
+
+client.impact_metrics.observe_histogram('request_time_ms', 125)
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies.

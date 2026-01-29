@@ -107,6 +107,12 @@ module Unleash
         self.experimental_mode[:format] == 'delta'
     end
 
+    def generate_custom_http_headers
+      return self.custom_http_headers.call if self.custom_http_headers.respond_to?(:call)
+
+      self.custom_http_headers
+    end
+
     private
 
     def set_defaults
@@ -151,12 +157,6 @@ module Unleash
       return if custom_http_headers.is_a?(Hash) || custom_http_headers.respond_to?(:call)
 
       raise ArgumentError, "custom_http_headers must be a Hash or a Proc."
-    end
-
-    def generate_custom_http_headers
-      return self.custom_http_headers.call if self.custom_http_headers.respond_to?(:call)
-
-      self.custom_http_headers
     end
 
     def set_option(opt, val)

@@ -133,22 +133,22 @@ RSpec.describe Unleash::MetricsReporter do
 
     expect(WebMock).to(have_requested(:post, 'http://test-url/client/metrics')
       .with do |req|
-                         body = JSON.parse(req.body, symbolize_names: true)
+        body = JSON.parse(req.body, symbolize_names: true)
 
-                         expect(body).to include(
-                           platformName: anything,
-                           platformVersion: anything,
-                           yggdrasilVersion: anything,
-                           specVersion: anything,
-                           bucket: include(
-                             start: anything,
-                             stop: anything,
-                             toggles: {}
-                           )
-                         )
+        expect(body).to include(
+          platformName: anything,
+          platformVersion: anything,
+          yggdrasilVersion: anything,
+          specVersion: anything,
+          bucket: include(
+            start: anything,
+            stop: anything,
+            toggles: {}
+          )
+        )
 
-                         true # tell WebMock we're done matching
-                       end)
+        true # tell WebMock we're done matching
+      end)
   end
 
   it "includes metadata in the report" do

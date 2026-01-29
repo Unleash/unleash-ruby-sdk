@@ -24,12 +24,11 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = ">= 2.7"
 
   spec.add_dependency "ld-eventsource", "2.2.4" unless RUBY_ENGINE == 'jruby'
-  spec.add_dependency "yggdrasil-engine", "~> 1.1.1"
+  spec.add_dependency "yggdrasil-engine", "~> 1.2.1"
 
   spec.add_dependency "base64", "~> 0.3.0"
   spec.add_dependency "logger", "~> 1.6"
 
-  spec.add_development_dependency "bundler", "~> 2.1"
   spec.add_development_dependency "rake", "~> 12.3"
   spec.add_development_dependency "rspec", "~> 3.12"
   spec.add_development_dependency "rspec-json_expectations", "~> 2.2"
