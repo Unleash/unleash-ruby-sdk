@@ -28,7 +28,7 @@ You can use this client with [Unleash Enterprise](https://www.getunleash.io/pric
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'unleash', '~> 6.4.1'
+gem 'unleash', '~> 6.5.0'
 ```
 
 And then execute:
