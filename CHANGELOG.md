@@ -13,6 +13,11 @@ Note: These changes are not considered notable:
 
 ## [Unreleased]
 
+## [6.5.0] - 2026-01-29
+
+### Added
+- Impact metrics 
+
 ## [6.4.1] - 2025-12-04
 
 ### Changed
