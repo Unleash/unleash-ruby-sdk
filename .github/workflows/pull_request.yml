@@ -30,6 +30,7 @@ jobs:
           - windows
         ruby-version:
           - jruby-9.4
+          - '4.0'
           - 3.4
           - 3.3
           - 3.2
