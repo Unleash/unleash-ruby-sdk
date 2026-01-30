@@ -568,6 +568,78 @@ RSpec.describe Unleash::Client do
     expect(unleash_client.disabled?('any_feature', {}, false)).to eq(false)
   end
 
+  it "should accept symbols as flag names", focus: true do
+    WebMock.stub_request(:post, "http://test-url/client/register")
+      .with(
+        headers: {
+          'Accept' => '*/*',
+          'Content-Type' => 'application/json',
+          'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+          'Unleash-Appname' => 'my-test-app',
+          'Unleash-Instanceid' => 'rspec/test',
+          'User-Agent' => "UnleashClientRuby/#{Unleash::VERSION} #{RUBY_ENGINE}/#{RUBY_VERSION} [#{RUBY_PLATFORM}]",
+          'X-Api-Key' => '123'
+        }
+      )
+      .to_return(status: 200, body: "", headers: {})
+
+    features_response_body = '{
+      "version": 1,
+      "features": [
+        "name": "toggleNameAgain",
+        "enabled": true,
+        "strategies": [{ "name": "default" }],
+        "variants": [
+          {
+            "name": "a",
+            "weight": 50,
+            "payload": {
+              "type": "string",
+              "value": ""
+            }
+          },
+          {
+            "name": "b",
+            "weight": 50,
+            "payload": {
+              "type": "string",
+              "value": ""
+            }
+          }
+        ]
+      ]
+    }'
+
+    WebMock.stub_request(:get, "http://test-url/client/features")
+      .with(
+        headers: {
+          'Accept' => '*/*',
+          'Content-Type' => 'application/json',
+          'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+          'Unleash-Appname' => 'my-test-app',
+          'Unleash-Instanceid' => 'rspec/test',
+          'User-Agent' => "UnleashClientRuby/#{Unleash::VERSION} #{RUBY_ENGINE}/#{RUBY_VERSION} [#{RUBY_PLATFORM}]",
+          'X-Api-Key' => '123'
+        }
+      )
+      .to_return(status: 200, body: features_response_body, headers: {})
+
+    Unleash.configure do |config|
+      config.url      = 'http://test-url/'
+      config.app_name = 'my-test-app'
+      config.instance_id = 'rspec/test'
+      config.disable_metrics = true
+      config.custom_http_headers = { 'X-API-KEY' => '123' }
+      config.log_level = Logger::DEBUG
+    end
+
+    unleash_client = Unleash::Client.new
+
+    expect(
+      unleash_client.is_enabled?(:toggleNameAgain, {}, true)
+    ).to eq(true)
+  end
+
   it "should yield correctly to block when using if_enabled" do
     unleash_client = Unleash::Client.new
     cont = Unleash::Context.new(user_id: 1)
@@ -666,6 +738,11 @@ RSpec.describe Unleash::Client do
 
     it 'returns variant' do
       ret = client.get_variant(feature)
+      expect(ret.name).to eq 'a'
+    end
+
+    it 'returns variant with symbolised name' do
+      ret = client.get_variant(feature.to_sym)
       expect(ret.name).to eq 'a'
     end
 
