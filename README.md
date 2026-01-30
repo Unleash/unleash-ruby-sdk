@@ -15,6 +15,7 @@ You can use this client with [Unleash Enterprise](https://www.getunleash.io/pric
 
 ## Supported Ruby interpreters
 
+- MRI 4.0
 - MRI 3.4
 - MRI 3.3
 - MRI 3.2
