@@ -29,6 +29,7 @@ jobs:
           - macos
           - windows
         ruby-version:
+          - jruby-10.0
           - jruby-9.4
           - 3.4
           - 3.3
@@ -37,6 +38,8 @@ jobs:
           - '3.0'
           - 2.7
         exclude:
+          - os: windows
+            ruby-version: jruby-10.0
           - os: windows
             ruby-version: jruby-9.4
 
