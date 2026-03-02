@@ -1,3 +1,3 @@
 module Unleash
-  CLIENT_SPECIFICATION_VERSION = "5.2.2".freeze
+  CLIENT_SPECIFICATION_VERSION = "6.0.1".freeze
 end
