@@ -13,10 +13,15 @@ Note: These changes are not considered notable:
 
 ## [Unreleased]
 
+## [6.6.0] - 2026-03-02
+
+### Added
+- Regex constraints
+
 ## [6.5.0] - 2026-01-29
 
 ### Added
-- Impact metrics 
+- Impact metrics
 
 ## [6.4.1] - 2025-12-04
 
