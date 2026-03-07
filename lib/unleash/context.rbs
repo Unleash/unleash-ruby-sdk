@@ -1,0 +1,21 @@
+module Unleash
+  class Context
+    ATTRS: ::Array[:app_name | :environment | :user_id | :session_id | :remote_address | :current_time]
+
+    def initialize: (?::Hash[String, any] params) -> Context
+
+    def to_s: () -> ::String
+
+    def get_by_name: ((String | Symbol) name) -> any
+
+    def include?: ((String | Symbol) name) -> bool
+
+    private
+
+    # Method to fetch values from hash for two types of keys: string in camelCase and symbol in snake_case
+    def value_for: ((String | Symbol) key, Hash[String, any] params, ?any? default_value) -> any
+
+    # converts CamelCase to snake_case
+    def underscore: ((String | Symbol) camel_cased_word) -> String
+  end
+end

@@ -1,0 +1,39 @@
+module Unleash
+  class Client
+    attr_accessor fetcher_scheduled_executor: ScheduledExecutor
+
+    attr_accessor metrics_scheduled_executor: ScheduledExecutor
+
+    def initialize: (*untyped opts) -> void
+
+    def is_enabled?: (String feature, ?Context? context, ?bool default_value_param) ?{ () -> bool } -> bool
+
+    # enabled? is a more ruby idiomatic method name than is_enabled?
+    alias enabled? is_enabled?
+
+    # execute a code block (passed as a parameter), if is_enabled? is true.
+    def if_enabled: (String feature, ?Context context, ?bool default_value) { (untyped) -> bool } -> (untyped | nil)
+
+    def get_variant: (String feature, ?Context context, ?Variant fallback_variant) -> Variant
+
+    # safe shutdown: also flush metrics to server and toggles to disk
+    def shutdown: () -> nil
+
+    # quick shutdown: just kill running threads
+    def shutdown!: () -> nil
+
+    private
+
+    def info: () -> { appName: String, instanceId: String, sdkVersion: String, strategies: Array[String], started: String, interval: Integer }
+
+    def start_toggle_fetcher: () -> nil
+
+    def start_metrics: () -> nil
+
+    def register: () -> nil
+
+    def disabled_variant: () -> Variant
+
+    def first_fetch_is_eager: () -> bool
+  end
+end
