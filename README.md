@@ -20,8 +20,6 @@ You can use this client with [Unleash Enterprise](https://www.getunleash.io/pric
 - MRI 3.3
 - MRI 3.2
 - MRI 3.1
-- MRI 3.0
-- MRI 2.7
 - jruby 10.0
 - jruby 9.4
 
