@@ -1,0 +1,78 @@
+name: Publish
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  publish:
+    name: Publish gem
+    runs-on: ubuntu-latest
+    environment: release
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+          bundler-cache: true
+
+      - name: Resolve version
+        id: version
+        run: |
+          version="$(bundle exec ruby -r ./lib/unleash/version -e 'puts Unleash::VERSION')"
+          gem_version="$(bundle exec ruby -e 'spec = Gem::Specification.load("unleash-client.gemspec"); puts spec.version')"
+          tag="v${version}"
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+          echo "gem_version=${gem_version}" >> "$GITHUB_OUTPUT"
+          echo "tag=${tag}" >> "$GITHUB_OUTPUT"
+
+      - name: Check tag does not exist
+        run: |
+          if git rev-parse "${{ steps.version.outputs.tag }}" >/dev/null 2>&1; then
+            echo "Tag ${{ steps.version.outputs.tag }} already exists"
+            exit 1
+          fi
+
+      - name: Download test cases
+        run: |
+          semver="$(ruby echo_client_spec_version.rb)"
+          git clone --depth 5 --branch "v${semver}" https://github.com/Unleash/client-specification.git client-specification
+
+      - name: Run specs
+        run: bundle exec rspec
+
+      - name: Run lint
+        run: bundle exec rubocop --format simple
+
+      - name: Build gem
+        run: bundle exec rake build
+
+      - name: Configure RubyGems credentials
+        uses: rubygems/configure-rubygems-credentials@main
+
+      - name: Publish to RubyGems
+        run: gem push "pkg/unleash-${{ steps.version.outputs.gem_version }}.gem"
+
+      - name: Tag release
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "${{ steps.version.outputs.tag }}"
+          git push origin "${{ steps.version.outputs.tag }}"
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ steps.version.outputs.tag }}" \
+            --title "${{ steps.version.outputs.tag }}" \
+            --generate-notes
