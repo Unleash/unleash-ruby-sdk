@@ -43,10 +43,10 @@ module Unleash
     end
 
     def sdk_flavor_fields
-      fields = {}
-      fields[:sdkFlavor] = self.sdk_flavor if self.sdk_flavor
-      fields[:sdkFlavorVersion] = self.sdk_flavor_version if self.sdk_flavor_version
-      fields
+      {
+        sdkFlavor: self.sdk_flavor,
+        sdkFlavorVersion: self.sdk_flavor_version
+      }.compact
     end
 
     def validate!
