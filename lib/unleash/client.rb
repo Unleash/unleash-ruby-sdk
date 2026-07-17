@@ -135,7 +135,7 @@ module Unleash
         'platformVersion': RUBY_VERSION,
         'yggdrasilVersion': "0.13.3",
         'specVersion': Unleash::CLIENT_SPECIFICATION_VERSION
-      }
+      }.merge(Unleash.configuration.sdk_flavor_fields)
     end
 
     def start_toggle_fetcher
