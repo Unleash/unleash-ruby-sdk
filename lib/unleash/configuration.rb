@@ -23,7 +23,9 @@ module Unleash
       :bootstrap_config,
       :strategies,
       :use_delta_api,
-      :experimental_mode
+      :experimental_mode,
+      :sdk_flavor,
+      :sdk_flavor_version
     attr_reader :connection_id
 
     def initialize(opts = {})
@@ -38,6 +40,13 @@ module Unleash
 
     def metrics_interval_in_millis
       self.metrics_interval * 1_000
+    end
+
+    def sdk_flavor_fields
+      fields = {}
+      fields[:sdkFlavor] = self.sdk_flavor if self.sdk_flavor
+      fields[:sdkFlavorVersion] = self.sdk_flavor_version if self.sdk_flavor_version
+      fields
     end
 
     def validate!
@@ -133,6 +142,8 @@ module Unleash
       self.strategies       = Unleash::Strategies.new
       self.use_delta_api    = false
       self.experimental_mode = nil
+      self.sdk_flavor       = nil
+      self.sdk_flavor_version = nil
 
       self.custom_http_headers = {}
       @connection_id = SecureRandom.uuid
