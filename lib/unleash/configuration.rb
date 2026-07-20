@@ -124,6 +124,8 @@ module Unleash
 
     private
 
+    # A flat list of configuration defaults — long by nature, not by complexity.
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def set_defaults
       self.app_name         = nil
       self.environment      = 'default'
@@ -142,12 +144,13 @@ module Unleash
       self.strategies       = Unleash::Strategies.new
       self.use_delta_api    = false
       self.experimental_mode = nil
-      self.sdk_flavor       = nil
+      self.sdk_flavor = nil
       self.sdk_flavor_version = nil
 
       self.custom_http_headers = {}
       @connection_id = SecureRandom.uuid
     end
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
     def initialize_default_logger
       self.logger = Logger.new($stdout)
