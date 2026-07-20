@@ -42,7 +42,7 @@ module Unleash
         'instanceId': Unleash.configuration.instance_id,
         'connectionId': Unleash.configuration.connection_id,
         'bucket': bucket
-      }
+      }.merge(Unleash.configuration.sdk_flavor_fields)
     end
 
     def build_report(impact_metrics)

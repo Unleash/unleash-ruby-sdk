@@ -23,7 +23,9 @@ module Unleash
       :bootstrap_config,
       :strategies,
       :use_delta_api,
-      :experimental_mode
+      :experimental_mode,
+      :sdk_flavor,
+      :sdk_flavor_version
     attr_reader :connection_id
 
     def initialize(opts = {})
@@ -38,6 +40,13 @@ module Unleash
 
     def metrics_interval_in_millis
       self.metrics_interval * 1_000
+    end
+
+    def sdk_flavor_fields
+      {
+        sdkFlavor: self.sdk_flavor,
+        sdkFlavorVersion: self.sdk_flavor_version
+      }.compact
     end
 
     def validate!
@@ -115,6 +124,8 @@ module Unleash
 
     private
 
+    # A flat list of configuration defaults — long by nature, not by complexity.
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def set_defaults
       self.app_name         = nil
       self.environment      = 'default'
@@ -133,10 +144,13 @@ module Unleash
       self.strategies       = Unleash::Strategies.new
       self.use_delta_api    = false
       self.experimental_mode = nil
+      self.sdk_flavor = nil
+      self.sdk_flavor_version = nil
 
       self.custom_http_headers = {}
       @connection_id = SecureRandom.uuid
     end
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
     def initialize_default_logger
       self.logger = Logger.new($stdout)

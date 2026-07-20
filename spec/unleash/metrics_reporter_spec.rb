@@ -171,4 +171,43 @@ RSpec.describe Unleash::MetricsReporter do
         )
       )
   end
+
+  it "includes the sdk flavor in the report when configured" do
+    WebMock.stub_request(:post, "http://test-url/client/metrics")
+      .to_return(status: 200, body: "", headers: {})
+
+    Unleash.configuration.sdk_flavor = 'unleash-openfeature-ruby-provider'
+    Unleash.configuration.sdk_flavor_version = '1.2.3'
+
+    Unleash.engine = YggdrasilEngine.new
+    Unleash.engine.count_toggle('featureA', true)
+
+    metrics_reporter.post
+
+    expect(WebMock).to have_requested(:post, 'http://test-url/client/metrics')
+      .with(
+        body: hash_including(
+          sdkFlavor: 'unleash-openfeature-ruby-provider',
+          sdkFlavorVersion: '1.2.3'
+        )
+      )
+  end
+
+  it "omits the sdk flavor from the report when not configured" do
+    WebMock.stub_request(:post, "http://test-url/client/metrics")
+      .to_return(status: 200, body: "", headers: {})
+
+    Unleash.engine = YggdrasilEngine.new
+    Unleash.engine.count_toggle('featureA', true)
+
+    metrics_reporter.post
+
+    expect(WebMock).to(have_requested(:post, 'http://test-url/client/metrics')
+      .with do |req|
+        body = JSON.parse(req.body, symbolize_names: true)
+        expect(body).not_to include(:sdkFlavor)
+        expect(body).not_to include(:sdkFlavorVersion)
+        true
+      end)
+  end
 end
