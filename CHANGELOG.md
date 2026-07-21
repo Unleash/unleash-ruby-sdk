@@ -13,6 +13,11 @@ Note: These changes are not considered notable:
 
 ## [Unreleased]
 
+## [6.7.0] - 2026-07-21
+
+### Added
+- SDK flavour and flavour version API
+
 ## [6.6.0] - 2026-03-02
 
 ### Added
