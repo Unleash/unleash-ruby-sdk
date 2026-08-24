@@ -36,7 +36,7 @@ module Unleash
       {
         'platformName': RUBY_ENGINE,
         'platformVersion': RUBY_VERSION,
-        'yggdrasilVersion': "0.13.3",
+        'yggdrasilVersion': "0.21.5",
         'specVersion': Unleash::CLIENT_SPECIFICATION_VERSION,
         'appName': Unleash.configuration.app_name,
         'instanceId': Unleash.configuration.instance_id,
