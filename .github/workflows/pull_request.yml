@@ -14,10 +14,14 @@ jobs:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: "3.0"
+        ruby-version: "3.1"
         bundler-cache: true
     - name: Run RuboCop
       run: bundle exec rubocop
+    - name: Run Steep / RBS Type signature verification
+      run: |
+        bundle exec steep check --steepfile=./Steepfile --severity-level=error | ruby -pe 'sub(/^(.+):(\d+):(\d+): (.+)$/, %q{::error file=\1,line=\2,col=\3::\4})'
+      shell: bash
 
   test:
     runs-on: ${{ matrix.os }}-latest

@@ -1,0 +1,15 @@
+module Unleash
+  class Variant
+    attr_accessor name: String
+
+    attr_accessor enabled: bool
+
+    attr_accessor payload: String
+
+    def initialize: (?::Hash[String, String] params) -> void
+
+    def to_s: () -> ::String
+
+    def ==: (Variant other) -> bool
+  end
+end
