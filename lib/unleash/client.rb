@@ -46,6 +46,7 @@ module Unleash
     # rubocop:enable Metrics/AbcSize
 
     def is_enabled?(feature, context = nil, default_value_param = false, &fallback_blk)
+      feature = feature.to_s
       Unleash.logger.debug "Unleash::Client.is_enabled? feature: #{feature} with context #{context}"
 
       default_value = if block_given?
@@ -86,6 +87,7 @@ module Unleash
     end
 
     def get_variant(feature, context = Unleash::Context.new, fallback_variant = disabled_variant)
+      feature = feature.to_s
       variant = Unleash.engine.get_variant(feature, context)
 
       if variant.nil?
